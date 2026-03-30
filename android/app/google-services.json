@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "72773297730",
+    "firebase_url": "https://clickit-2688c-default-rtdb.firebaseio.com",
+    "project_id": "clickit-2688c",
+    "storage_bucket": "clickit-2688c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72773297730:android:3db20baface4ec297b2fdb",
+        "android_client_info": {
+          "package_name": "com.clickit.clickitdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72773297730:android:cc89b99020597c027b2fdb",
+        "android_client_info": {
+          "package_name": "com.clickit.clickituserapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72773297730:android:cde59bdb899a5b2f7b2fdb",
+        "android_client_info": {
+          "package_name": "com.clickit.clickitvendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72773297730:android:60af254269f403007b2fdb",
+        "android_client_info": {
+          "package_name": "com.clickituser.clickituserapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
