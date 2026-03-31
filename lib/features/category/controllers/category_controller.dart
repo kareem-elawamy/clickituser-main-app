@@ -19,6 +19,12 @@ class CategoryController extends ChangeNotifier {
   List<CategoryModel> get categoryList => _categoryList;
   int? get categorySelectedIndex => _categorySelectedIndex;
 
+  bool _isSubCategoryLoading = false;
+  bool get isSubCategoryLoading => _isSubCategoryLoading;
+
+  List<SubCategory>? _subCategoryList;
+  List<SubCategory>? get subCategoryList => _subCategoryList;
+
   void initCategoryData(List<dynamic> data) {
     _categoryList.clear();
     data.forEach((category) => _categoryList.add(CategoryModel.fromJson(category)));
@@ -49,6 +55,22 @@ class CategoryController extends ChangeNotifier {
       }
       notifyListeners();
 
+  }
+
+  Future<void> getCategoryChildes(String id) async {
+    _isSubCategoryLoading = true;
+    _subCategoryList = null;
+    notifyListeners();
+
+    ApiResponse apiResponse = await categoryServiceInterface!.getCategoryChildes(id);
+    if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
+      _subCategoryList = [];
+      apiResponse.response!.data.forEach((subCategory) => _subCategoryList!.add(SubCategory.fromJson(subCategory)));
+    } else {
+      ApiChecker.checkApi(apiResponse);
+    }
+    _isSubCategoryLoading = false;
+    notifyListeners();
   }
 
   List<int> selectedCategoryIds = [];

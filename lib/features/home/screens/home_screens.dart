@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/featured_deal_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/flash_deal_controller.dart';
@@ -62,9 +63,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadData(bool reload) async {
     final authController = Provider.of<AuthController>(Get.context!, listen: false);
+    final productController = Provider.of<ProductController>(Get.context!, listen: false);
+
+    unawaited(productController.getHomeEssential(reload));
+    unawaited(productController.getHomeDiscovery(reload));
+    unawaited(productController.getHomeProducts(reload));
 
     final List<Future<dynamic>> apiCalls = [
-      Provider.of<ProductController>(Get.context!, listen: false).getHomeDataAggregation(reload),
       Provider.of<CartController>(Get.context!, listen: false).getCartData(Get.context!),
       Provider.of<NotificationController>(Get.context!, listen: false).getNotificationList(1),
     ];
@@ -248,8 +253,7 @@ class _HomePageState extends State<HomePage> {
 
 
 
-                    const Padding(padding: EdgeInsets.only(bottom: Dimensions.homePagePadding),
-                      child: RecommendedProductWidget()),
+
 
 
 
@@ -270,8 +274,7 @@ class _HomePageState extends State<HomePage> {
 
 
 
-                    const HomeCategoryProductWidget(isHomePage: true),
-                    const SizedBox(height: Dimensions.homePagePadding),
+
 
 
                     Consumer<BannerController>(builder: (context, footerBannerProvider, child){

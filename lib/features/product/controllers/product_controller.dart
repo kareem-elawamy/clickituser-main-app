@@ -212,20 +212,43 @@ int selectedProductTypeIndex = 0;
   List<Product> get brandOrCategoryProductList => _brandOrCategoryProductList;
   bool? get hasData => _hasData;
 
-  void initBrandOrCategoryProductList(bool isBrand, String id, BuildContext context) async {
-    _brandOrCategoryProductList.clear();
-    _hasData = true;
-    ApiResponse apiResponse = await productServiceInterface!.getBrandOrCategoryProductList(isBrand, id);
-    if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
-      apiResponse.response!.data.forEach((product) => _brandOrCategoryProductList.add(Product.fromJson(product)));
-      _hasData = _brandOrCategoryProductList.length > 1;
-      List<Product> products = [];
-      products.addAll(_brandOrCategoryProductList);
+  bool _isBrandOrCategoryProductLoading = false;
+  bool get isBrandOrCategoryProductLoading => _isBrandOrCategoryProductLoading;
+  bool _hasMoreBrandOrCategoryProduct = true;
+  bool get hasMoreBrandOrCategoryProduct => _hasMoreBrandOrCategoryProduct;
+
+  void initBrandOrCategoryProductList(bool isBrand, String id, BuildContext context, {String offset = '1'}) async {
+    if (offset == '1') {
       _brandOrCategoryProductList.clear();
+      _hasData = true;
+      _hasMoreBrandOrCategoryProduct = true;
+    }
+    _isBrandOrCategoryProductLoading = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+    
+    ApiResponse apiResponse = await productServiceInterface!.getBrandOrCategoryProductList(isBrand, id, offset);
+    if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
+      if (offset == '1') {
+        _brandOrCategoryProductList.clear();
+      }
+      List<Product> products = [];
+      if (apiResponse.response!.data is Map) {
+        if (apiResponse.response!.data.containsKey('products')) {
+          apiResponse.response!.data['products'].forEach((product) => products.add(Product.fromJson(product)));
+        }
+      } else {
+        apiResponse.response!.data.forEach((product) => products.add(Product.fromJson(product)));
+      }
+      
       _brandOrCategoryProductList.addAll(products);
+      _hasMoreBrandOrCategoryProduct = products.length >= 10;
+      _hasData = _brandOrCategoryProductList.isNotEmpty;
     } else {
       ApiChecker.checkApi( apiResponse);
     }
+    _isBrandOrCategoryProductLoading = false;
     notifyListeners();
   }
 
@@ -319,7 +342,7 @@ int selectedProductTypeIndex = 0;
   Future<void> getHomeCategoryProductList(bool reload) async {
     // Disabled. The App now strictly uses getHomeDataAggregation() API
     // which aggregates this data instantly and without the legacy nested arrays.
-    await getHomeDataAggregation(reload);
+    await getHomeProducts(reload);
   }
 
   MostDemandedProductModel? mostDemandedProductModel;
@@ -380,11 +403,17 @@ int selectedProductTypeIndex = 0;
     if (rawLatest != null) {
       _lProductList = [];
       try {
-        final productsList = _extractProductList(rawLatest) ?? (rawLatest is List ? rawLatest : []);
+        List<dynamic> productsList = [];
+        if (rawLatest is Map) {
+          productsList = rawLatest['products'] ?? [];
+          _lPageSize = rawLatest['total_size'];
+        } else if (rawLatest is List) {
+          productsList = rawLatest;
+        }
+        
         for (final v in productsList) {
           _lProductList!.add(Product.fromJson(v as Map<String, dynamic>));
         }
-        if (rawLatest is Map) _lPageSize = rawLatest['total_size'];
       } catch (e) {
         if (kDebugMode) print('Parsing error for latest_products: $e');
       }
@@ -410,10 +439,22 @@ int selectedProductTypeIndex = 0;
       _firstFeaturedLoading = false;
     }
     if (data['recommended_product'] != null) {
-      _recommendedProduct = Product.fromJson(data['recommended_product']);
+      try {
+        if (data['recommended_product'] is Map) {
+          _recommendedProduct = Product.fromJson(data['recommended_product']);
+        }
+      } catch (e) {
+        if (kDebugMode) print('Parsing error for recommended_product: $e');
+      }
     }
     if (data['find_what_you_need'] != null) {
-      findWhatYouNeedModel = FindWhatYouNeedModel.fromJson(data['find_what_you_need']);
+      try {
+        if (data['find_what_you_need'] is Map) {
+          findWhatYouNeedModel = FindWhatYouNeedModel.fromJson(data['find_what_you_need']);
+        }
+      } catch (e) {
+        if (kDebugMode) print('Parsing error for find_what_you_need: $e');
+      }
     }
     if (data['just_for_you'] != null) {
       justForYouProduct = [];
@@ -472,73 +513,102 @@ int selectedProductTypeIndex = 0;
     return decoded;
   }
 
-  Future<void> getHomeDataAggregation(bool reload) async {
+  Map<String, dynamic> _coerceData(dynamic raw) {
+    Map<String, dynamic> data = {};
+    if (raw is String) {
+      try {
+        final decoded = jsonDecode(raw);
+        if (decoded is Map) {
+          data = Map<String, dynamic>.from(decoded);
+        } else if (decoded is List && decoded.isNotEmpty) {
+          data = Map<String, dynamic>.from(decoded[0]);
+        }
+      } catch (e) {
+        if (kDebugMode) print('JSON Decode Error: $e');
+      }
+    } else if (raw is Map) {
+      data = Map<String, dynamic>.from(raw);
+    } else if (raw is List && raw.isNotEmpty) {
+      data = Map<String, dynamic>.from(raw[0]);
+    }
+    return data;
+  }
+
+  Future<void> getHomeEssential(bool reload) async {
     try {
-      ApiResponse apiResponse = await productServiceInterface!.getHomeData();
+      ApiResponse apiResponse = await productServiceInterface!.getHomeEssentialData();
       if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
-        // Safely coerce whatever Dio gives us into a Map<String, dynamic>
-        Map<String, dynamic> data = {};
-        final raw = apiResponse.response!.data;
-        if (raw is String) {
-          final decoded = jsonDecode(raw);
-          if (decoded is Map) {
-            data = Map<String, dynamic>.from(decoded);
-          } else if (decoded is List && decoded.isNotEmpty) {
-            data = Map<String, dynamic>.from(decoded[0]);
-          }
-        } else if (raw is Map) {
-          data = Map<String, dynamic>.from(raw);
-        } else if (raw is List && raw.isNotEmpty) {
-          data = Map<String, dynamic>.from(raw[0]);
-        }
-
+        Map<String, dynamic> data = _coerceData(apiResponse.response!.data);
         if (Get.context != null) {
-          Provider.of<BannerController>(Get.context!, listen: false).initBannerData(data['banners'] ?? []);
-          Provider.of<CategoryController>(Get.context!, listen: false).initCategoryData(data['categories'] ?? []);
-          Provider.of<ShopController>(Get.context!, listen: false).initTopSellerData(data['top_sellers'] ?? []);
-          Provider.of<BrandController>(Get.context!, listen: false).initBrandData(data['brands'] ?? []);
-          Provider.of<FeaturedDealController>(Get.context!, listen: false).initFeaturedDealData(
-            _extractProductList(data['featured_deal']) ?? _extractProductList(data['featured_deals']) ?? []);
-          Provider.of<FlashDealController>(Get.context!, listen: false).initFlashDealData(data);
+          Provider.of<BannerController>(Get.context!, listen: false)
+              .initBannerData(data['banners'] is List ? data['banners'] : []);
+          Provider.of<CategoryController>(Get.context!, listen: false)
+              .initCategoryData(data['categories'] is List ? data['categories'] : []);
+          Provider.of<FlashDealController>(Get.context!, listen: false)
+              .initFlashDealData(data);
         }
+      } else {
+        ApiChecker.checkApi(apiResponse);
+      }
+    } catch (e, stack) {
+      if (kDebugMode) {
+        print('Error in getHomeEssential: $e');
+        print(stack);
+      }
+    }
+    notifyListeners();
+  }
 
+  Future<void> getHomeDiscovery(bool reload) async {
+    try {
+      ApiResponse apiResponse = await productServiceInterface!.getHomeDiscoveryData();
+      if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
+        Map<String, dynamic> data = _coerceData(apiResponse.response!.data);
+        if (Get.context != null) {
+          Provider.of<ShopController>(Get.context!, listen: false)
+              .initTopSellerData(data['top_sellers'] is List ? data['top_sellers'] : []);
+          Provider.of<BrandController>(Get.context!, listen: false)
+              .initBrandData(data['brands'] is List ? data['brands'] : []);
+          
+          List<dynamic> fDeals = _extractProductList(data['featured_deal']) ?? 
+                                 _extractProductList(data['featured_deals']) ?? [];
+          Provider.of<FeaturedDealController>(Get.context!, listen: false)
+              .initFeaturedDealData(fDeals is List ? fDeals : []);
+        }
+      } else {
+        ApiChecker.checkApi(apiResponse);
+      }
+    } catch (e, stack) {
+      if (kDebugMode) {
+        print('Error in getHomeDiscovery: $e');
+        print(stack);
+      }
+    }
+    notifyListeners();
+  }
+
+  int currentJustForYouIndex = 0;
+  void setCurrentJustForYourIndex(int index) {
+    currentJustForYouIndex = index;
+    notifyListeners();
+  }
+
+  Future<void> getHomeProducts(bool reload) async {
+    try {
+      ApiResponse apiResponse = await productServiceInterface!.getHomeProductsData();
+      if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
+        Map<String, dynamic> data = _coerceData(apiResponse.response!.data);
         await initHomeData(data);
       } else {
         ApiChecker.checkApi(apiResponse);
       }
     } catch (e, stack) {
       if (kDebugMode) {
-        print('Error in getHomeDataAggregation: $e');
+        print('Error in getHomeProducts: $e');
         print(stack);
       }
     }
-  }
-
-  int currentJustForYouIndex = 0;
-  void setCurrentJustForYourIndex(int index){
-    currentJustForYouIndex = index;
     notifyListeners();
-  }
-
-  Future<void> fetchHomeData(bool reload) async {
-    ApiResponse apiResponse = await productServiceInterface!.getHomeData();
-    if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
-      Map<String, dynamic> data = apiResponse.response!.data;
-      
-      if(Get.context != null) {
-        Provider.of<BannerController>(Get.context!, listen: false).initBannerData(data['banners'] ?? []);
-        Provider.of<CategoryController>(Get.context!, listen: false).initCategoryData(data['categories'] ?? []);
-        Provider.of<ShopController>(Get.context!, listen: false).initTopSellerData(data['top_sellers'] ?? []);
-        Provider.of<BrandController>(Get.context!, listen: false).initBrandData(data['brands'] ?? []);
-        Provider.of<FeaturedDealController>(Get.context!, listen: false).initFeaturedDealData(
-          _extractProductList(data['featured_deal']) ?? _extractProductList(data['featured_deals']) ?? []);
-        Provider.of<FlashDealController>(Get.context!, listen: false).initFlashDealData(data);
-      }
-      
-      await initHomeData(data);
-    } else {
-      ApiChecker.checkApi(apiResponse);
-    }
   }
 
 }

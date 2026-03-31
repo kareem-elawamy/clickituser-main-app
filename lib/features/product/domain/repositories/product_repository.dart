@@ -44,13 +44,13 @@ class ProductRepository implements ProductRepositoryInterface{
 
 
   @override
-  Future<ApiResponse> getBrandOrCategoryProductList(bool isBrand, String id) async {
+  Future<ApiResponse> getBrandOrCategoryProductList(bool isBrand, String id, String offset) async {
     try {
       String uri;
       if(isBrand){
-        uri = '${AppConstants.brandProductUri}$id?guest_id=1';
+        uri = '${AppConstants.brandProductUri}$id?guest_id=1&limit=10&offset=$offset';
       }else {
-        uri = '${AppConstants.categoryProductUri}$id?guest_id=1';
+        uri = '${AppConstants.categoryProductUri}$id?guest_id=1&limit=10&offset=$offset';
       }
       final response = await dioClient!.get(uri);
       return ApiResponse.withSuccess(response);
@@ -163,6 +163,39 @@ class ProductRepository implements ProductRepositoryInterface{
       // Append the real guest_id from SharedPreferences (falls back to '1' if not set)
       final String guestId = sharedPreferences?.getString(AppConstants.guestId) ?? '1';
       final response = await dioClient!.get('${AppConstants.homeDataUri}?guest_id=$guestId');
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
+  @override
+  Future<ApiResponse> getHomeEssentialData() async {
+    try {
+      final String guestId = sharedPreferences?.getString(AppConstants.guestId) ?? '1';
+      final response = await dioClient!.get('${AppConstants.homeEssentialUri}?guest_id=$guestId');
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
+  @override
+  Future<ApiResponse> getHomeDiscoveryData() async {
+    try {
+      final String guestId = sharedPreferences?.getString(AppConstants.guestId) ?? '1';
+      final response = await dioClient!.get('${AppConstants.homeDiscoveryUri}?guest_id=$guestId');
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
+  @override
+  Future<ApiResponse> getHomeProductsData() async {
+    try {
+      final String guestId = sharedPreferences?.getString(AppConstants.guestId) ?? '1';
+      final response = await dioClient!.get('${AppConstants.homeProductsUri}?guest_id=$guestId');
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.getMessage(e));

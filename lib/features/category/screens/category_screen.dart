@@ -23,14 +23,13 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
-    Provider.of<ProductController>(context, listen: false)
-        .initBrandOrCategoryProductList(
-            false,
-            Provider.of<CategoryController>(context, listen: false)
-                .categoryList[0]
-                .id
-                .toString(),
-            context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final categoryProvider = Provider.of<CategoryController>(context, listen: false);
+      if (categoryProvider.categoryList.isNotEmpty) {
+        categoryProvider.getCategoryChildes(categoryProvider.categoryList[0].id.toString());
+      }
+    });
+
     super.initState();
   }
 
@@ -68,14 +67,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             return InkWell(
                                 onTap: () {
                                   categoryProvider.changeSelectedIndex(index);
-                                  Provider.of<ProductController>(context,
-                                          listen: false)
-                                      .initBrandOrCategoryProductList(
-                                          false,
-                                          categoryProvider
-                                              .categoryList[index].id
-                                              .toString(),
-                                          context);
+                                  categoryProvider.getCategoryChildes(category.id.toString());
                                 },
                                 child: CategoryItem(
                                     title: category.name,
@@ -84,26 +76,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         index));
                           })),
                   Expanded(
-                      child: Column(
+                      child: categoryProvider.isSubCategoryLoading ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))) 
+                      : Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
                           padding:
                               const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                          itemCount: categoryProvider
-                                  .categoryList[
-                                      categoryProvider.categorySelectedIndex!]
-                                  .subCategories!
-                                  .length +
-                              1,
+                          itemCount: (categoryProvider.subCategoryList?.length ?? 0) + 1,
                           itemBuilder: (context, index) {
                             late SubCategory subCategory;
                             if (index != 0) {
-                              subCategory = categoryProvider
-                                  .categoryList[
-                                      categoryProvider.categorySelectedIndex!]
-                                  .subCategories![index - 1];
+                              subCategory = categoryProvider.subCategoryList![index - 1];
                             }
                             if (index == 0) {
                               return Ink(
@@ -165,6 +150,22 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               return Ink(
                                 color: Theme.of(context).highlightColor,
                                 child: ListTile(
+                                  leading: Container(
+                                    height: 40, width: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                                      borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
+                                      child: CustomImageWidget(
+                                        image: subCategory.icon != null && subCategory.icon!.startsWith('http') 
+                                            ? subCategory.icon! 
+                                            : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/${subCategory.icon}',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                   title: Text(subCategory.name!,
                                       style: textRegular.copyWith(
                                           fontSize: Dimensions.fontSizeDefault),
@@ -315,12 +316,13 @@ class CategoryItem extends StatelessWidget {
                           ? Theme.of(context).highlightColor
                           : Theme.of(context).hintColor),
                   borderRadius: BorderRadius.circular(10)),
-              child: ClipRRect(
+                  child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CustomImageWidget(
                       fit: BoxFit.cover,
-                      image:
-                          '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/$icon'))),
+                      image: icon != null && icon!.startsWith('http') 
+                          ? icon! 
+                          : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/$icon'))),
           Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: Dimensions.paddingSizeExtraSmall),

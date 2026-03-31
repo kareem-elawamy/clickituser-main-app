@@ -5,7 +5,7 @@ import 'package:flutter_sixvalley_ecommerce/interface/repo_interface.dart';
 abstract class ProductRepositoryInterface<T> extends RepositoryInterface{
 
   Future<dynamic> getFilteredProductList(BuildContext context,String offset, ProductType productType, String? title);
-  Future<dynamic> getBrandOrCategoryProductList(bool isBrand, String id);
+  Future<dynamic> getBrandOrCategoryProductList(bool isBrand, String id, String offset);
   Future<dynamic> getRelatedProductList(String id);
   Future<dynamic> getFeaturedProductList(String offset);
   Future<dynamic> getLatestProductList(String offset);
@@ -16,4 +16,7 @@ abstract class ProductRepositoryInterface<T> extends RepositoryInterface{
   Future<dynamic> getMostSearchingProductList(int offset);
   Future<dynamic> getHomeCategoryProductList();
   Future<dynamic> getHomeData();
+  Future<dynamic> getHomeEssentialData();
+  Future<dynamic> getHomeDiscoveryData();
+  Future<dynamic> getHomeProductsData();
 }

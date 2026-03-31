@@ -9,10 +9,14 @@ class AppConstants {
   static const String userId = 'userId';
   static const String name = 'name';
   static const String homeDataUri = '/api/v1/get-home-data';
+  static const String homeEssentialUri = '/api/v1/home/essential';
+  static const String homeDiscoveryUri = '/api/v1/home/discovery';
+  static const String homeProductsUri = '/api/v1/home/products';
   static const String categoriesUri = '/api/v1/categories?guest_id=1';
   static const String brandUri = '/api/v1/brands?guest_id=1';
   static const String brandProductUri = '/api/v1/brands/products/';
   static const String categoryProductUri = '/api/v1/categories/products/';
+  static const String categoryChildesUri = '/api/v1/categories/childes/';
   static const String registrationUri = '/api/v1/auth/register';
   static const String loginUri = '/api/v1/auth/login';
   static const String logOut = '/api/v1/auth/logout';

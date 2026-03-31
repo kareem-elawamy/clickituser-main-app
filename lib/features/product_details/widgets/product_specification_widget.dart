@@ -22,12 +22,15 @@ class ProductSpecificationWidget extends StatelessWidget {
 
 
         productSpecification.isNotEmpty ?
-        Expanded(child: Html(data: productSpecification,
-          style: {
-            "table": Style(backgroundColor: const Color.fromARGB(0x50, 0xee, 0xee, 0xee)),
-            "tr": Style(border: const Border(bottom: BorderSide(color: Colors.grey))),
-            "th": Style(padding: HtmlPaddings.symmetric(vertical: 6), backgroundColor: Colors.grey),
-            "td": Style(padding: HtmlPaddings.symmetric(vertical: 6), alignment: Alignment.topLeft)})) :
+        Expanded(child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Html(data: productSpecification,
+            style: {
+              "table": Style(backgroundColor: const Color.fromARGB(0x50, 0xee, 0xee, 0xee)),
+              "tr": Style(border: const Border(bottom: BorderSide(color: Colors.grey))),
+              "th": Style(padding: HtmlPaddings.symmetric(vertical: 6), backgroundColor: Colors.grey),
+              "td": Style(padding: HtmlPaddings.symmetric(vertical: 6), alignment: Alignment.topLeft)}),
+        )) :
         const Center(child: Text('No specification')),
         const SizedBox(height: Dimensions.paddingSizeDefault),
 

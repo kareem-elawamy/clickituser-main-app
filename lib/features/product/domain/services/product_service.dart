@@ -9,8 +9,8 @@ class ProductService implements ProductServiceInterface{
   ProductService({required this.productRepositoryInterface});
 
   @override
-  Future getBrandOrCategoryProductList(bool isBrand, String id) async{
-    return await productRepositoryInterface.getBrandOrCategoryProductList(isBrand, id);
+  Future getBrandOrCategoryProductList(bool isBrand, String id, String offset) async{
+    return await productRepositoryInterface.getBrandOrCategoryProductList(isBrand, id, offset);
   }
 
   @override
@@ -66,5 +66,20 @@ class ProductService implements ProductServiceInterface{
   @override
   Future getHomeData() async {
     return await productRepositoryInterface.getHomeData();
+  }
+
+  @override
+  Future getHomeEssentialData() async {
+    return await productRepositoryInterface.getHomeEssentialData();
+  }
+
+  @override
+  Future getHomeDiscoveryData() async {
+    return await productRepositoryInterface.getHomeDiscoveryData();
+  }
+
+  @override
+  Future getHomeProductsData() async {
+    return await productRepositoryInterface.getHomeProductsData();
   }
 }

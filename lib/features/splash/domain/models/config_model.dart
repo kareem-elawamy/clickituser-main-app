@@ -61,6 +61,7 @@ class ConfigModel {
   int? orderVerification;
   InhouseTemporaryClose? inhouseTemporaryClose;
   InhouseVacationAdd? inhouseVacationAdd;
+  String? primaryColor;
 
   ConfigModel(
       {this.brandSetting,
@@ -125,6 +126,7 @@ class ConfigModel {
         this.orderVerification,
         this.inhouseTemporaryClose,
         this.inhouseVacationAdd,
+        this.primaryColor,
       });
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
@@ -276,6 +278,7 @@ class ConfigModel {
     inhouseVacationAdd = json['inhouse_vacation_add'] != null
         ? InhouseVacationAdd.fromJson(json['inhouse_vacation_add'])
         : null;
+    primaryColor = json['primary_color'];
 
   }
 

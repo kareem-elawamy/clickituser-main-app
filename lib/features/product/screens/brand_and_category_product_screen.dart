@@ -24,10 +24,30 @@ class BrandAndCategoryProductScreen extends StatefulWidget {
 }
 
 class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductScreen> {
+  final ScrollController _scrollController = ScrollController();
+  int offset = 1;
+
   @override
   void initState() {
-    Provider.of<ProductController>(context, listen: false).initBrandOrCategoryProductList(widget.isBrand, widget.id, context);
+    Provider.of<ProductController>(context, listen: false).initBrandOrCategoryProductList(widget.isBrand, widget.id, context, offset: offset.toString());
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels
+          && Provider.of<ProductController>(context, listen: false).brandOrCategoryProductList.isNotEmpty
+          && !Provider.of<ProductController>(context, listen: false).isBrandOrCategoryProductLoading
+          && Provider.of<ProductController>(context, listen: false).hasMoreBrandOrCategoryProduct) {
+        offset++;
+        Provider.of<ProductController>(context, listen: false).initBrandOrCategoryProductList(widget.isBrand, widget.id, context, offset: offset.toString());
+      }
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -45,7 +65,7 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
               margin: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
               color: Theme.of(context).highlightColor,
               child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls!.brandImageUrl}/${widget.image}',
+                CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls?.brandImageUrl ?? ''}/${widget.image}',
                   width: 80, height: 80, fit: BoxFit.cover,),
                 const SizedBox(width: Dimensions.paddingSizeSmall),
 
@@ -60,6 +80,7 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
             productController.brandOrCategoryProductList.isNotEmpty ?
             Expanded(
               child: MasonryGridView.count(
+                controller: _scrollController,
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
                 physics: const BouncingScrollPhysics(),
                 crossAxisCount: MediaQuery.of(context).size.width> 480? 3 : 2,
@@ -71,12 +92,19 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
               ),
             ) :
 
-            Expanded(child: productController.hasData! ?
+            Expanded(child: (productController.hasData ?? true) ?
 
               ProductShimmer(isHomePage: false,
                 isEnabled: Provider.of<ProductController>(context).brandOrCategoryProductList.isEmpty)
                 : const NoInternetOrDataScreenWidget(isNoInternet: false, icon: Images.noProduct,
               message: 'no_product_found',)),
+
+            productController.isBrandOrCategoryProductLoading && offset > 1
+                ? Center(child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
+                  ))
+                : const SizedBox.shrink(),
 
           ]);
         },

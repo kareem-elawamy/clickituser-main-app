@@ -35,6 +35,8 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  late ScrollController scrollController;
+
   _loadData( BuildContext context) async{
     Provider.of<ProductDetailsController>(context, listen: false).getProductDetails(context, widget.productId.toString(), widget.slug.toString());
     Provider.of<ReviewController>(context, listen: false).removePrevReview();
@@ -47,104 +49,121 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void initState() {
+    scrollController = ScrollController();
     _loadData(context);
     super.initState();
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
     return Scaffold(
       appBar: CustomAppBar(title: getTranslated('product_details', context)),
 
       body: RefreshIndicator(onRefresh: () async => _loadData(context),
-        child: Consumer<ProductDetailsController>(
-          builder: (context, details, child) {
+        child: Selector<ProductDetailsController, bool>(
+          selector: (_, details) => details.isDetails,
+          builder: (context, isDetailsLoading, child) {
+            if (isDetailsLoading) {
+              return const ProductDetailsShimmer();
+            }
+
+            // Retrieve the loaded model synchronously without listening to all its changes
+            final detailsController = Provider.of<ProductDetailsController>(context, listen: false);
+            final productModel = detailsController.productDetailsModel;
+
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: !details.isDetails?
-              Column(children: [
+              child: Column(children: [
 
-                ProductImageWidget(productModel: details.productDetailsModel),
+                ProductImageWidget(productModel: productModel),
 
                 Column(children: [
 
-                  ProductTitleWidget(productModel: details.productDetailsModel,
-                      averageRatting: details.productDetailsModel?.averageReview?? "0"),
+                  ProductTitleWidget(productModel: productModel,
+                      averageRatting: productModel?.averageReview?? "0"),
 
 
 
                   const ReviewAndSpecificationSectionWidget(),
 
 
-                  details.isReviewSelected?
-                  ReviewSection(details: details):
+                  Selector<ProductDetailsController, bool>(
+                    selector: (_, details) => details.isReviewSelected,
+                    builder: (context, isReviewSelected, _) {
+                      return isReviewSelected?
+                      ReviewSection(details: detailsController):
 
-                  Column(children: [
-                    (details.productDetailsModel?.details != null && details.productDetailsModel!.details!.isNotEmpty) ?
-                    Container(height: 250,
-                      margin: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
-                      padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                      child: ProductSpecificationWidget(productSpecification: details.productDetailsModel!.details ?? ''),) : const SizedBox(),
+                      Column(children: [
+                        (productModel?.details != null && productModel!.details!.isNotEmpty) ?
+                        Container(height: 250,
+                          margin: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                          child: ProductSpecificationWidget(productSpecification: productModel.details ?? ''),) : const SizedBox(),
 
-                    details.productDetailsModel?.videoUrl != null?
-                    YoutubeVideoWidget(url: details.productDetailsModel!.videoUrl):const SizedBox(),
-
-
-                    (details.productDetailsModel != null ) ?
-                    ShopInfoWidget(sellerId: details.productDetailsModel!.addedBy == 'seller'? details.productDetailsModel!.userId.toString() : "0") : const SizedBox.shrink(),
-
-                    const SizedBox(height: Dimensions.paddingSizeLarge,),
-
-                    Container(padding: const EdgeInsets.only(top: Dimensions.paddingSizeLarge, bottom: Dimensions.paddingSizeDefault),
-                        decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                        child: const PromiseWidget()),
+                        productModel?.videoUrl != null?
+                        YoutubeVideoWidget(url: productModel!.videoUrl!):const SizedBox(),
 
 
+                        (productModel != null ) ?
+                        ShopInfoWidget(sellerId: productModel.addedBy == 'seller'? productModel.userId.toString() : "0") : const SizedBox.shrink(),
 
-                    (details.productDetailsModel != null && details.productDetailsModel!.addedBy == 'seller' ) ?
-                    Consumer<SellerProductController>(
-                      builder: (context, sellerProductController, _) {
-                        return (sellerProductController.sellerProduct != null && sellerProductController.sellerProduct!.products != null &&
-                            sellerProductController.sellerProduct!.products!.isNotEmpty)?
-                        Padding(padding: const EdgeInsets.symmetric(vertical : Dimensions.paddingSizeDefault),
-                          child: TitleRowWidget(title: getTranslated('more_from_the_shop', context),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => TopSellerProductScreen(
-                              fromMore: true,
-                              sellerId: details.productDetailsModel?.seller?.id,
-                              temporaryClose: details.productDetailsModel?.seller?.shop?.temporaryClose,
-                              vacationStatus: details.productDetailsModel?.seller?.shop?.vacationStatus??false,
-                              vacationEndDate: details.productDetailsModel?.seller?.shop?.vacationEndDate,
-                              vacationStartDate: details.productDetailsModel?.seller?.shop?.vacationStartDate,
-                              name: details.productDetailsModel?.seller?.shop?.name,
-                              banner: details.productDetailsModel?.seller?.shop?.banner,
-                              image: details.productDetailsModel?.seller?.shop?.image,)));
-                          },),):const SizedBox();
-                      }
-                    ):const SizedBox(),
+                        const SizedBox(height: Dimensions.paddingSizeLarge,),
 
-                    (details.productDetailsModel?.addedBy == 'seller') ?
-                    Padding(padding: const EdgeInsets.symmetric(horizontal : Dimensions.paddingSizeDefault),
-                        child: ShopProductViewList(
-                            scrollController: scrollController, sellerId: details.productDetailsModel!.userId!)):const SizedBox(),
+                        Container(padding: const EdgeInsets.only(top: Dimensions.paddingSizeLarge, bottom: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                            child: const PromiseWidget()),
 
-                    Consumer<ProductController>(
-                      builder: (context, productController,_) {
-                        return (productController.relatedProductList != null && productController.relatedProductList!.isNotEmpty)?Padding(padding: const EdgeInsets.symmetric(
-                            vertical: Dimensions.paddingSizeExtraSmall),
-                          child: TitleRowWidget(title: getTranslated('related_products', context), isDetailsPage: true)): const SizedBox();
-                      }
-                    ),
-                    const SizedBox(height: 5),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
-                      child: RelatedProductWidget(),
-                    ),
-                  ],),
+
+
+                        (productModel != null && productModel.addedBy == 'seller' ) ?
+                        Consumer<SellerProductController>(
+                          builder: (context, sellerProductController, _) {
+                            return (sellerProductController.sellerProduct != null && sellerProductController.sellerProduct!.products != null &&
+                                sellerProductController.sellerProduct!.products!.isNotEmpty)?
+                            Padding(padding: const EdgeInsets.symmetric(vertical : Dimensions.paddingSizeDefault),
+                              child: TitleRowWidget(title: getTranslated('more_from_the_shop', context),
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => TopSellerProductScreen(
+                                  fromMore: true,
+                                  sellerId: productModel.seller?.id,
+                                  temporaryClose: productModel.seller?.shop?.temporaryClose,
+                                  vacationStatus: productModel.seller?.shop?.vacationStatus??false,
+                                  vacationEndDate: productModel.seller?.shop?.vacationEndDate,
+                                  vacationStartDate: productModel.seller?.shop?.vacationStartDate,
+                                  name: productModel.seller?.shop?.name,
+                                  banner: productModel.seller?.shop?.banner,
+                                  image: productModel.seller?.shop?.image,)));
+                              },),):const SizedBox();
+                          }
+                        ):const SizedBox(),
+
+                        (productModel?.addedBy == 'seller') ?
+                        Padding(padding: const EdgeInsets.symmetric(horizontal : Dimensions.paddingSizeDefault),
+                            child: ShopProductViewList(
+                                scrollController: scrollController, sellerId: productModel!.userId!)):const SizedBox(),
+
+                        Consumer<ProductController>(
+                          builder: (context, productController,_) {
+                            return (productController.relatedProductList != null && productController.relatedProductList!.isNotEmpty)?Padding(padding: const EdgeInsets.symmetric(
+                                vertical: Dimensions.paddingSizeExtraSmall),
+                              child: TitleRowWidget(title: getTranslated('related_products', context), isDetailsPage: true)): const SizedBox();
+                          }
+                        ),
+                        const SizedBox(height: 5),
+                        const Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+                          child: RelatedProductWidget(),
+                        ),
+                      ],);
+                    }
+                  ),
                 ],),
-              ],
-              ):
-              const ProductDetailsShimmer(),
+              ]),
             );
           },
         ),

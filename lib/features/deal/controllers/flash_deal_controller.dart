@@ -75,9 +75,15 @@ class FlashDealController extends ChangeNotifier {
           notifyListeners();
         });
 
-        if (data['flash_deal_products'] != null) {
+        if (data['flash_deal_products'] is List) {
           _flashDealList.clear();
-          data['flash_deal_products'].forEach((flashDeal) => _flashDealList.add(Product.fromJson(flashDeal)));
+          (data['flash_deal_products'] as List).forEach((flashDeal) {
+            try {
+              _flashDealList.add(Product.fromJson(flashDeal));
+            } catch (e) {
+              // Ignore invalid products
+            }
+          });
           _currentIndex = 0;
         }
       }

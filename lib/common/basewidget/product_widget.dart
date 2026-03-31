@@ -18,7 +18,7 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String ratting = productModel.rating != null && productModel.rating!.isNotEmpty? productModel.rating![0].average! : "0";
+    String ratting = productModel.rating != null && productModel.rating!.isNotEmpty? productModel.rating![0].average ?? "0" : "0";
 
     return InkWell(onTap: () {Navigator.push(context, PageRouteBuilder(transitionDuration: const Duration(milliseconds: 1000),
           pageBuilder: (context, anim1, anim2) => ProductDetails(productId: productModel.id,
@@ -36,7 +36,7 @@ class ProductWidget extends StatelessWidget {
                 Theme.of(context).primaryColor.withOpacity(.05) : ColorResources.getIconBg(context),
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),),
               child: ClipRRect(borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).baseUrls!.productThumbnailUrl}/${productModel.thumbnail}',
+                child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl ?? ''}/${productModel.thumbnail}',
                   height: MediaQuery.of(context).size.width/2.45,width: MediaQuery.of(context).size.width, fit: BoxFit.contain,))),
 
             // Product Details
@@ -44,7 +44,7 @@ class ProductWidget extends StatelessWidget {
               child: Center(child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                  if(productModel.currentStock! < productModel.minimumOrderQuantity! && productModel.productType == 'physical')
+                  if((productModel.currentStock ?? 0) < (productModel.minimumOrderQuantity ?? 1) && productModel.productType == 'physical')
                   Padding(padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraSmall),
                     child: Text(getTranslated('out_of_stock', context)??'',
                     style: textRegular.copyWith(color: const Color(0xFFF36A6A)))),
@@ -71,7 +71,7 @@ class ProductWidget extends StatelessWidget {
 
 
 
-                      productModel.discount!= null && productModel.discount! > 0 ?
+                      (productModel.discount ?? 0) > 0 ?
                       Text(PriceConverter.convertPrice(context, productModel.unitPrice),
                       style: titleRegular.copyWith(color: Theme.of(context).hintColor,
                         decoration: TextDecoration.lineThrough, fontSize: Dimensions.fontSizeSmall)) : const SizedBox.shrink(),
@@ -90,7 +90,7 @@ class ProductWidget extends StatelessWidget {
 
           // Off
 
-          productModel.discount! > 0 ?
+          (productModel.discount ?? 0) > 0 ?
           Positioned(top: 10, left: 0, child: Container(height: 20,
               padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
               decoration: BoxDecoration(color: ColorResources.getPrimary(context),

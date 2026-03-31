@@ -15,4 +15,9 @@ class CategoryService implements CategoryServiceInterface{
     return await categoryRepoInterface.getSellerWiseCategoryList(sellerId);
   }
 
+  @override
+  Future getCategoryChildes(String id) async{
+    return await categoryRepoInterface.getCategoryChildes(id);
+  }
+
 }

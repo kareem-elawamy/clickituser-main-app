@@ -23,24 +23,24 @@ class ProductTitleWidget extends StatelessWidget {
     double? startingPrice = 0;
     double? endingPrice;
     if(productModel != null && productModel!.variation != null && productModel!.variation!.isNotEmpty) {
-      List<double?> priceList = [];
+      List<double> priceList = [];
       for (var variation in productModel!.variation!) {
-        priceList.add(variation.price);
+        if (variation.price != null) priceList.add(variation.price!);
       }
-      priceList.sort((a, b) => a!.compareTo(b!));
-      startingPrice = priceList[0];
-      if(priceList[0]! < priceList[priceList.length-1]!) {
-        endingPrice = priceList[priceList.length-1];
+      if (priceList.isNotEmpty) {
+        priceList.sort((a, b) => a.compareTo(b));
+        startingPrice = priceList[0];
+        if(priceList[0] < priceList[priceList.length-1]) {
+          endingPrice = priceList[priceList.length-1];
+        }
       }
-    }else {
-      startingPrice = productModel!.unitPrice;
+    } else {
+      startingPrice = productModel?.unitPrice;
     }
 
     return productModel != null? Container(
       padding: const EdgeInsets.symmetric(horizontal : Dimensions.homePagePadding),
-      child: Consumer<ProductDetailsController>(
-        builder: (context, details, child) {
-          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
             Text(productModel!.name ?? '',
                 style: titleRegular.copyWith(fontSize: Dimensions.fontSizeLarge), maxLines: 2),
@@ -79,8 +79,8 @@ class ProductTitleWidget extends StatelessWidget {
             Padding(padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
               child: Row(children: [
                  RatingBar(rating: productModel!.reviews != null ? productModel!.reviews!.isNotEmpty ?
-                 double.parse(averageRatting!) : 0.0 : 0.0),
-                Text('(${productModel?.reviewsCount})')])),
+                 (double.tryParse(averageRatting ?? '0') ?? 0.0) : 0.0 : 0.0),
+                Text('(${productModel?.reviewsCount ?? 0})')])),
 
 
             Consumer<ReviewController>(
@@ -96,21 +96,27 @@ class ProductTitleWidget extends StatelessWidget {
                     style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault,))])),
 
 
-                  Text.rich(TextSpan(children: [
-                    TextSpan(text: '${details.orderCount} ', style: textMedium.copyWith(
-                        color: Provider.of<ThemeController>(context, listen: false).darkTheme?
-                        Theme.of(context).hintColor : Theme.of(context).primaryColor,
-                        fontSize: Dimensions.fontSizeDefault)),
-                    TextSpan(text: '${getTranslated('orders', context)} | ',
-                        style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault,))])),
-
-                  Text.rich(TextSpan(children: [
-                    TextSpan(text: '${details.wishCount} ', style: textMedium.copyWith(
-                        color: Provider.of<ThemeController>(context, listen: false).darkTheme?
-                        Theme.of(context).hintColor : Theme.of(context).primaryColor,
-                        fontSize: Dimensions.fontSizeDefault)),
-                    TextSpan(text: '${getTranslated('wish_listed', context)}',
-                        style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault,))])),
+                  Consumer<ProductDetailsController>(
+                    builder: (context, details, _) {
+                      return Row(children: [
+                        Text.rich(TextSpan(children: [
+                          TextSpan(text: '${details.orderCount ?? 0} ', style: textMedium.copyWith(
+                              color: Provider.of<ThemeController>(context, listen: false).darkTheme?
+                              Theme.of(context).hintColor : Theme.of(context).primaryColor,
+                              fontSize: Dimensions.fontSizeDefault)),
+                          TextSpan(text: '${getTranslated('orders', context)} | ',
+                              style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault,))])),
+      
+                        Text.rich(TextSpan(children: [
+                          TextSpan(text: '${details.wishCount ?? 0} ', style: textMedium.copyWith(
+                              color: Provider.of<ThemeController>(context, listen: false).darkTheme?
+                              Theme.of(context).hintColor : Theme.of(context).primaryColor,
+                              fontSize: Dimensions.fontSizeDefault)),
+                          TextSpan(text: '${getTranslated('wish_listed', context)}',
+                              style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault,))])),
+                      ]);
+                    }
+                  ),
                 ]);}),
             const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -127,7 +133,9 @@ class ProductTitleWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
 
                     itemBuilder: (context, index) {
-                      String colorString = '0xff${productModel!.colors![index].code!.substring(1, 7)}';
+                      String code = productModel!.colors![index].code ?? '#FFFFFF';
+                      if (code.length < 7) code = '#FFFFFF';
+                      String colorString = '0xff${code.substring(1, 7)}';
                       return Center(child: Container(
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall)),
                           child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
@@ -150,6 +158,7 @@ class ProductTitleWidget extends StatelessWidget {
               itemCount: productModel!.choiceOptions!.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
+                var options = productModel!.choiceOptions![index].options;
                 return Row(crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text('${getTranslated('available', context)} ${productModel!.choiceOptions![index].title} :',
@@ -160,10 +169,10 @@ class ProductTitleWidget extends StatelessWidget {
                         child: ListView.builder(
                          scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: productModel!.choiceOptions![index].options!.length,
+                          itemCount: options?.length ?? 0,
                           itemBuilder: (context, i) {
                             return Center(child: Padding(padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
-                                child: Text(productModel!.choiceOptions![index].options![i].trim(), maxLines: 1,
+                                child: Text(options![i].trim(), maxLines: 1,
                                     overflow: TextOverflow.ellipsis, style: textRegular.copyWith(
                                       fontSize: Dimensions.fontSizeLarge,
                                         color: Provider.of<ThemeController>(context, listen: false).darkTheme?
@@ -172,9 +181,7 @@ class ProductTitleWidget extends StatelessWidget {
                 ]);
               },
             ):const SizedBox(),
-          ]);
-        },
-      ),
+          ]),
     ):const SizedBox();
   }
 }

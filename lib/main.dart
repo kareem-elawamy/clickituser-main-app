@@ -151,6 +151,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = const Color(0xFFF8A718);
+    String? colorCode = Provider.of<SplashController>(context).configModel?.primaryColor;
+    if (colorCode != null && colorCode.isNotEmpty) {
+      try {
+        primaryColor = Color(int.parse(colorCode.replaceAll('#', '0xff')));
+      } catch(e) {
+        // Fallback to default if parsing fails
+      }
+    }
+
     List<Locale> locals = [];
     for (var language in AppConstants.languages) {
       locals.add(Locale(language.languageCode!, language.countryCode));
@@ -159,7 +169,7 @@ class MyApp extends StatelessWidget {
       title: AppConstants.appName,
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: Provider.of<ThemeController>(context).darkTheme ? dark : light,
+      theme: Provider.of<ThemeController>(context).darkTheme ? dark(primaryColor: primaryColor) : light(primaryColor: primaryColor),
       locale: Provider.of<LocalizationController>(context).locale,
       localizationsDelegates: [
         AppLocalization.delegate,

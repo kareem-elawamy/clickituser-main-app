@@ -31,6 +31,10 @@ class SplashController extends ChangeNotifier {
   bool get firstTimeConnectionCheck => _firstTimeConnectionCheck;
 
   Future<bool> initConfig(BuildContext context) async {
+    if (_configModel != null) {
+      return true; // Singleton: Config already loaded, bypass API completely.
+    }
+    
     _hasConnection = true;
     ApiResponse apiResponse = await splashServiceInterface!.getConfig();
     bool isSuccess;

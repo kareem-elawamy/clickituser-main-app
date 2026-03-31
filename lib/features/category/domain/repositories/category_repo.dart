@@ -29,6 +29,14 @@ class CategoryRepository implements CategoryRepoInterface {
     }
   }
 
+  Future<ApiResponse> getCategoryChildes(String id) async {
+    try {
+      final response = await dioClient!.get('${AppConstants.categoryChildesUri}$id');
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
   @override
   Future add(value) {
     // TODO: implement add

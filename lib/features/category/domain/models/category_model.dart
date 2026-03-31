@@ -53,8 +53,8 @@ class CategoryModel {
     _position = int.tryParse(json['position']?.toString() ?? '');
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _subCategories = [];
     if (json['childes'] != null) {
-      _subCategories = [];
       json['childes'].forEach((v) {
         _subCategories!.add(SubCategory.fromJson(v));
       });
@@ -119,8 +119,8 @@ class SubCategory {
     _position = int.tryParse(json['position']?.toString() ?? '');
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _subSubCategories = [];
     if (json['childes'] != null) {
-      _subSubCategories = [];
       json['childes'].forEach((v) {
         _subSubCategories!.add(SubSubCategory.fromJson(v));
       });

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/featured_deal_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/flash_deal_controller.dart';
@@ -66,7 +67,11 @@ class _AsterThemeHomeScreenState extends State<AsterThemeHomeScreen> {
 
 
   Future<void> _loadData(bool reload) async {
-    await Provider.of<ProductController>(Get.context!, listen: false).fetchHomeData(reload);
+    final productController = Provider.of<ProductController>(Get.context!, listen: false);
+
+    unawaited(productController.getHomeEssential(reload));
+    unawaited(productController.getHomeDiscovery(reload));
+    unawaited(productController.getHomeProducts(reload));
 
     // Group 3: Lazy — deferred non-critical data
     Future.wait([
@@ -294,8 +299,7 @@ class _AsterThemeHomeScreenState extends State<AsterThemeHomeScreen> {
                         height: MediaQuery.of(context).size.width * 1.2)):const SizedBox();}),
             ),
 
-            SliverToBoxAdapter(child: const Padding(padding: EdgeInsets.only(bottom: Dimensions.homePagePadding),
-                child: RecommendedProductWidget(fromAsterTheme: true))),
+
 
             SliverToBoxAdapter(child: const LatestProductListWidget()),
             SliverToBoxAdapter(child: const SizedBox(height: Dimensions.paddingSizeExtraSmall)),
@@ -333,10 +337,7 @@ class _AsterThemeHomeScreenState extends State<AsterThemeHomeScreen> {
                           SizedBox(height: ResponsiveHelper.isTab(context)? 170 : 100, child: const MoreStoreView(isHome: true,))])):const SizedBox();}),
             ),
 
-            SliverToBoxAdapter(
-              child: const Padding(padding: EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-                  child: HomeCategoryProductWidget(isHomePage: true)),
-            ),
+
             SliverToBoxAdapter(child: const SizedBox(height: Dimensions.homePagePadding)),
 
             SliverToBoxAdapter(
