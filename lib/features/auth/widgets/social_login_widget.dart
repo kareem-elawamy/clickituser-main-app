@@ -109,34 +109,97 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
                         ]))))) :const SizedBox(),
 
 
-              Provider.of<SplashController>(context,listen: false).configModel!.socialLogin![1].status!?
-              InkWell(onTap: () async{
-                  await Provider.of<FacebookLoginController>(context, listen: false).login();
-                  String? id,token,email, medium;
-                  if(Provider.of<FacebookLoginController>(Get.context!,listen: false).userData != null){
-                    id = Provider.of<FacebookLoginController>(Get.context!,listen: false).result.accessToken!.userId;
-                    email = Provider.of<FacebookLoginController>(Get.context!,listen: false).userData!['email'];
-                    token = Provider.of<FacebookLoginController>(Get.context!,listen: false).result.accessToken!.token;
-                    medium = 'facebook';
-                    socialLogin.email = email;
-                    socialLogin.medium = medium;
-                    socialLogin.token = token;
-                    socialLogin.uniqueId = id;
-                    await Provider.of<AuthController>(Get.context!, listen: false).socialLogin(socialLogin, route);
-                  }
-                },
-                child: Padding(padding: const EdgeInsets.all(6),
-                  child: Container(decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [BoxShadow(color: Theme.of(context).hintColor.withOpacity(.25), blurRadius: 1, spreadRadius: 1, offset: const Offset(0,0))]),
-                    child: Padding(padding: const EdgeInsets.all(8.0),
-                      child: Wrap(crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [SizedBox(height: 47,width: 47,
-                            child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                              child: Image.asset(Images.facebook),)),
-                        ]))))):const SizedBox(),
+              // Provider.of<SplashController>(context,listen: false).configModel!.socialLogin![1].status!?
+              // InkWell(onTap: () async{
+              //     await Provider.of<FacebookLoginController>(context, listen: false).login();
+              //     String? id,token,email, medium;
+              //     if(Provider.of<FacebookLoginController>(Get.context!,listen: false).userData != null){
+              //       id = Provider.of<FacebookLoginController>(Get.context!,listen: false).result.accessToken!.userId;
+              //       email = Provider.of<FacebookLoginController>(Get.context!,listen: false).userData!['email'];
+              //       token = Provider.of<FacebookLoginController>(Get.context!,listen: false).result.accessToken!.token;
+              //       medium = 'facebook';
+              //       socialLogin.email = email;
+              //       socialLogin.medium = medium;
+              //       socialLogin.token = token;
+              //       socialLogin.uniqueId = id;
+              //       await Provider.of<AuthController>(Get.context!, listen: false).socialLogin(socialLogin, route);
+              //     }
+              //   },
+              //   child: Padding(padding: const EdgeInsets.all(6),
+              //     child: Container(decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(100),
+              //         color: Theme.of(context).cardColor,
+              //         boxShadow: [BoxShadow(color: Theme.of(context).hintColor.withOpacity(.25), blurRadius: 1, spreadRadius: 1, offset: const Offset(0,0))]),
+              //       child: Padding(padding: const EdgeInsets.all(8.0),
+              //         child: Wrap(crossAxisAlignment: WrapCrossAlignment.center,
+              //           children: [SizedBox(height: 47,width: 47,
+              //               child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+              //                 child: Image.asset(Images.facebook),)),
+              //           ]))))):const SizedBox(),
 
+
+Provider.of<SplashController>(context, listen: false).configModel!.socialLogin![1].status! ?
+InkWell(
+  onTap: () async {
+    await Provider.of<FacebookLoginController>(context, listen: false).login();
+    String? id, token, email, medium;
+    
+    // Get the controller instance
+    final facebookController = Provider.of<FacebookLoginController>(context, listen: false);
+
+    if (facebookController.userData != null && facebookController.result.accessToken != null) {
+      // FIX 1: Get 'id' from userData instead of accessToken
+      id = facebookController.userData!['id']; 
+      
+      email = facebookController.userData!['email'];
+      
+      // FIX 2: Use 'tokenString' instead of 'token'
+      token = facebookController.result.accessToken!.tokenString;
+      
+      medium = 'facebook';
+      socialLogin.email = email;
+      socialLogin.medium = medium;
+      socialLogin.token = token;
+      socialLogin.uniqueId = id;
+      
+      // Use 'context' directly instead of 'Get.context' if Get is not imported
+      await Provider.of<AuthController>(context, listen: false).socialLogin(socialLogin, route);
+    }
+  },
+  child: Padding(
+    padding: const EdgeInsets.all(6),
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).hintColor.withOpacity(.25),
+            blurRadius: 1,
+            spreadRadius: 1,
+            offset: const Offset(0, 0),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            SizedBox(
+              height: 47,
+              width: 47,
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                child: Image.asset(Images.facebook),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+) : const SizedBox(),
 
               if(Provider.of<SplashController>(context,listen: false).configModel!.socialLogin!.length >2 && Provider.of<SplashController>(context,listen: false).configModel!.socialLogin![2].status! && Platform.isIOS)
               Padding(padding: const EdgeInsets.all(6.0),
