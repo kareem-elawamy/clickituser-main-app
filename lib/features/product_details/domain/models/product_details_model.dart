@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shop/domain/models/seller_model.dart';
 
@@ -346,12 +347,30 @@ class ProductDetailsModel {
     _refundable = json['refundable'];
     _digitalProductType = json['digital_product_type'];
     _digitalFileReady = json['digital_file_ready'];
-    _images = json['images'].cast<String>();
+    if (json['images'] != null) {
+      try {
+        _images = json['images'].cast<String>();
+      } catch (e) {
+        try {
+          _images = jsonDecode(json['images']).cast<String>();
+        } catch (e) {
+          _images = [];
+        }
+      }
+    } else {
+      _images = [];
+    }
     if (json['color_image'] != null) {
       _colorImage = <ColorImage>[];
-      json['color_image'].forEach((v) {
-        _colorImage!.add(ColorImage.fromJson(v));
-      });
+      try {
+        json['color_image'].forEach((v) {
+          _colorImage!.add(ColorImage.fromJson(v));
+        });
+      } catch (e) {
+        jsonDecode(json['color_image']).forEach((v) {
+          _colorImage!.add(ColorImage.fromJson(v));
+        });
+      }
     }
     _thumbnail = json['thumbnail'];
     _featured = json['featured'];
@@ -359,31 +378,61 @@ class ProductDetailsModel {
     _videoUrl = json['video_url'];
     if (json['colors_formatted'] != null) {
       _colors = <Colors>[];
-      json['colors_formatted'].forEach((v) {
-        _colors!.add(Colors.fromJson(v));
-      });
+      try {
+        json['colors_formatted'].forEach((v) {
+          _colors!.add(Colors.fromJson(v));
+        });
+      } catch (e) {
+        jsonDecode(json['colors_formatted']).forEach((v) {
+          _colors!.add(Colors.fromJson(v));
+        });
+      }
     }
-    _variantProduct = int.parse(json['variant_product'].toString());
-    _attributes = json['attributes'].cast<int>();
+    if (json['variant_product'] != null) {
+      _variantProduct = int.tryParse(json['variant_product'].toString());
+    } else {
+      _variantProduct = 0;
+    }
+    if (json['attributes'] != null && json['attributes'] != "null") {
+      try {
+        _attributes = json['attributes'].cast<int>();
+      } catch (e) {
+        _attributes = jsonDecode(json['attributes']).cast<int>();
+      }
+    } else {
+      _attributes = [];
+    }
     if (json['choice_options'] != null) {
       _choiceOptions = <ChoiceOptions>[];
-      json['choice_options'].forEach((v) {
-        _choiceOptions!.add(ChoiceOptions.fromJson(v));
-      });
+      try {
+        json['choice_options'].forEach((v) {
+          _choiceOptions!.add(ChoiceOptions.fromJson(v));
+        });
+      } catch (e) {
+        jsonDecode(json['choice_options']).forEach((v) {
+          _choiceOptions!.add(ChoiceOptions.fromJson(v));
+        });
+      }
     }
     if (json['variation'] != null) {
       _variation = <Variation>[];
-      json['variation'].forEach((v) {
-        _variation!.add(Variation.fromJson(v));
-      });
+      try {
+        json['variation'].forEach((v) {
+          _variation!.add(Variation.fromJson(v));
+        });
+      } catch (e) {
+        jsonDecode(json['variation']).forEach((v) {
+          _variation!.add(Variation.fromJson(v));
+        });
+      }
     }
     _published = json['published'];
-    _unitPrice = json['unit_price'].toDouble();
-    _purchasePrice = json['purchase_price'].toDouble();
-    _tax = json['tax'].toDouble();
+    _unitPrice = double.tryParse(json['unit_price']?.toString() ?? '0') ?? 0.0;
+    _purchasePrice = double.tryParse(json['purchase_price']?.toString() ?? '0') ?? 0.0;
+    _tax = double.tryParse(json['tax']?.toString() ?? '0') ?? 0.0;
     _taxModel = json['tax_model'];
     _taxType = json['tax_type'];
-    _discount = json['discount'].toDouble();
+    _discount = double.tryParse(json['discount']?.toString() ?? '0') ?? 0.0;
     _discountType = json['discount_type'];
     _currentStock = json['current_stock'];
     if(json['minimum_order_qty'] != null){
@@ -401,9 +450,13 @@ class ProductDetailsModel {
     _metaTitle = json['meta_title'];
     _metaDescription = json['meta_description'];
     _metaImage = json['meta_image'];
-    _requestStatus = int.parse(json['request_status'].toString());
+    if (json['request_status'] != null) {
+      _requestStatus = int.tryParse(json['request_status'].toString());
+    } else {
+      _requestStatus = 0;
+    }
     _deniedNote = json['denied_note'];
-    _shippingCost = json['shipping_cost'].toDouble();
+    _shippingCost = double.tryParse(json['shipping_cost']?.toString() ?? '0') ?? 0.0;
     _multiplyQty = json['multiply_qty'];
     _code = json['code'];
     if(json['reviews_count'] != null){
@@ -563,8 +616,8 @@ class Reviews {
 
   Reviews.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
-    _productId = int.parse(json['product_id'].toString());
-    _customerId = int.parse(json['customer_id'].toString());
+    _productId = json['product_id'] != null ? int.tryParse(json['product_id'].toString()) : 0;
+    _customerId = json['customer_id'] != null ? int.tryParse(json['customer_id'].toString()) : 0;
     _comment = json['comment'];
     _attachment = json['attachment'];
     _rating = json['rating'];

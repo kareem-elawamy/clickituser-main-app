@@ -61,9 +61,10 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
               String? variantName = (widget.product!.colors != null && widget.product!.colors!.isNotEmpty) ?
               widget.product!.colors![details.variantIndex!].name : null;
               List<String> variationList = [];
-              for(int index=0; index < widget.product!.choiceOptions!.length; index++) {
-                variationList.add(widget.product!.choiceOptions![index].options![details.variationIndex![index]].trim());
-
+              if (widget.product!.choiceOptions != null) {
+                for(int index=0; index < widget.product!.choiceOptions!.length; index++) {
+                  variationList.add(widget.product!.choiceOptions![index].options![details.variationIndex![index]].trim());
+                }
               }
               String variationType = '';
               if(variantName != null) {
@@ -86,25 +87,28 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
               double? price = widget.product!.unitPrice;
               int? stock = widget.product!.currentStock;
               variationType = variationType.replaceAll(' ', '');
-              for(Variation variation in widget.product!.variation!) {
-                if(variation.type == variationType) {
-                  price = variation.price;
-                  variation = variation;
-                  stock = variation.qty;
-                  break;
+              if (widget.product!.variation != null) {
+                for(Variation variationOption in widget.product!.variation!) {
+                  if(variationOption.type == variationType) {
+                    price = variationOption.price;
+                    variation = variationOption;
+                    stock = variationOption.qty;
+                    break;
+                  }
                 }
               }
-
 
               double priceWithDiscount = PriceConverter.convertWithDiscount(context,
                   price, widget.product!.discount, widget.product!.discountType)!;
               double priceWithQuantity = priceWithDiscount * details.quantity!;
 
               double total = 0, avg = 0;
-              for (var review in widget.product!.reviews!) {
-                total += review.rating!;
+              if (widget.product!.reviews != null && widget.product!.reviews!.isNotEmpty) {
+                for (var review in widget.product!.reviews!) {
+                  total += review.rating ?? 0.0;
+                }
+                avg = total / widget.product!.reviews!.length;
               }
-              avg = total /widget.product!.reviews!.length;
               String ratting = widget.product!.reviews != null && widget.product!.reviews!.isNotEmpty?
               avg.toString() : "0";
 
@@ -198,6 +202,7 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
 
 
                 // Variation
+                (widget.product!.choiceOptions != null && widget.product!.choiceOptions!.isNotEmpty) ?
                 Padding(padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding),
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -246,7 +251,7 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
                       ]);
                     },
                   ),
-                ),
+                ) : const SizedBox(),
                 const SizedBox(height: Dimensions.paddingSizeSmall,),
 
 

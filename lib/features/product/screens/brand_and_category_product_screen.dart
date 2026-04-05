@@ -74,6 +74,62 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
               ]),
             ) : const SizedBox.shrink(),
 
+            if (!widget.isBrand && productController.subCategoryList != null && productController.subCategoryList!.isNotEmpty)
+              Container(
+                height: 100,
+                margin: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeSmall),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: productController.subCategoryList!.length,
+                  itemBuilder: (context, index) {
+                    var subCategory = productController.subCategoryList![index];
+                    return InkWell(
+                      onTap: () {
+                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BrandAndCategoryProductScreen(
+                           isBrand: false,
+                           id: subCategory.id.toString(),
+                           name: subCategory.name,
+                         )));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 60, width: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                                color: Theme.of(context).primaryColor.withOpacity(0.1)
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                                child: CustomImageWidget(
+                                  image: subCategory.icon != null && subCategory.icon!.startsWith('http') 
+                                    ? subCategory.icon! 
+                                    : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/${subCategory.icon}',
+                                  fit: BoxFit.cover,
+                                )
+                              )
+                            ),
+                            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                            SizedBox(
+                              width: 60,
+                              child: Text(
+                                subCategory.name ?? '',
+                                textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,
+                                style: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                              )
+                            )
+                          ]
+                        )
+                      )
+                    );
+                  }
+                )
+              ),
+
             const SizedBox(height: Dimensions.paddingSizeSmall),
 
             // Products

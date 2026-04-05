@@ -27,19 +27,23 @@ class ApiErrorHandler {
             case DioExceptionType.badResponse:
               switch (error.response!.statusCode) {
                 case 403:
-                  if(error.response!.data['errors'] != null){
+                  if (error.response!.data is Map && error.response!.data['errors'] != null) {
                     ErrorResponse errorResponse = ErrorResponse.fromJson(error.response?.data);
-                   errorDescription = errorResponse.errors?[0].message;
-                  }else{
+                    errorDescription = errorResponse.errors?[0].message;
+                  } else if (error.response!.data is Map && error.response!.data['message'] != null) {
                     errorDescription = error.response!.data['message'];
+                  } else {
+                    errorDescription = error.response!.data;
                   }
                   break;
                 case 401:
-                  if(error.response!.data['errors'] != null){
+                  if (error.response!.data is Map && error.response!.data['errors'] != null) {
                     ErrorResponse errorResponse = ErrorResponse.fromJson(error.response?.data);
                     errorDescription = errorResponse.errors?[0].message;
-                  }else{
+                  } else if (error.response!.data is Map && error.response!.data['message'] != null) {
                     errorDescription = error.response!.data['message'];
+                  } else {
+                    errorDescription = error.response!.data;
                   }
                   Provider.of<AuthController>(Get.context!,listen: false).clearSharedData();
                   break;
@@ -50,10 +54,17 @@ class ApiErrorHandler {
                   errorDescription = error.response!.statusMessage;
                   break;
                 default:
-                  ErrorResponse errorResponse = ErrorResponse.fromJson(error.response!.data);
-                  if (errorResponse.errors != null && errorResponse.errors!.isNotEmpty) {
-                    errorDescription = errorResponse;
-                  } else {errorDescription = "Failed to load data - status code: ${error.response!.statusCode}";
+                  if (error.response!.data is Map && error.response!.data['errors'] != null) {
+                    ErrorResponse errorResponse = ErrorResponse.fromJson(error.response!.data);
+                    if (errorResponse.errors != null && errorResponse.errors!.isNotEmpty) {
+                      errorDescription = errorResponse;
+                    } else {
+                      errorDescription = error.response!.data['message'] ?? "Failed to load data - status code: ${error.response!.statusCode}";
+                    }
+                  } else if (error.response!.data is Map && error.response!.data['message'] != null) {
+                    errorDescription = error.response!.data['message'];
+                  } else {
+                    errorDescription = error.response!.data ?? "Failed to load data - status code: ${error.response!.statusCode}";
                   }
               }
               break;
@@ -72,6 +83,8 @@ class ApiErrorHandler {
         }
       } on FormatException catch (e) {
         errorDescription = e.toString();
+      } catch (e) {
+        errorDescription = error.toString();
       }
     } else {
       errorDescription = "is not a subtype of exception";

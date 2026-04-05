@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     unawaited(productController.getHomeEssential(reload));
     unawaited(productController.getHomeDiscovery(reload));
     unawaited(productController.getHomeProducts(reload));
+    unawaited(productController.getLatestProductList(1, reload: reload));
 
     final List<Future<dynamic>> apiCalls = [
       Provider.of<CartController>(Get.context!, listen: false).getCartData(Get.context!),
