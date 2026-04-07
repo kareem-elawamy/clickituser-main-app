@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sixvalley_ecommerce/data/model/api_response.dart';
 import 'package:flutter_sixvalley_ecommerce/features/category/domain/models/find_what_you_need.dart';
+import 'package:flutter_sixvalley_ecommerce/features/category/domain/models/category_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/home_category_product_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/most_demanded_product_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
@@ -207,9 +208,11 @@ int selectedProductTypeIndex = 0;
 
 
   final List<Product> _brandOrCategoryProductList = [];
+  List<SubCategory>? _subCategoryList;
   bool? _hasData;
 
   List<Product> get brandOrCategoryProductList => _brandOrCategoryProductList;
+  List<SubCategory>? get subCategoryList => _subCategoryList;
   bool? get hasData => _hasData;
 
   bool _isBrandOrCategoryProductLoading = false;
@@ -217,8 +220,18 @@ int selectedProductTypeIndex = 0;
   bool _hasMoreBrandOrCategoryProduct = true;
   bool get hasMoreBrandOrCategoryProduct => _hasMoreBrandOrCategoryProduct;
 
+  String? _currentCategoryOrBrandId;
+
+  void clearBrandOrCategoryProductList() {
+    _brandOrCategoryProductList.clear();
+    _isBrandOrCategoryProductLoading = true;
+    _hasData = true;
+    notifyListeners();
+  }
+
   void initBrandOrCategoryProductList(bool isBrand, String id, BuildContext context, {String offset = '1'}) async {
     if (offset == '1') {
+      _currentCategoryOrBrandId = '${isBrand}_$id';
       _brandOrCategoryProductList.clear();
       _hasData = true;
       _hasMoreBrandOrCategoryProduct = true;
@@ -229,14 +242,25 @@ int selectedProductTypeIndex = 0;
     });
     
     ApiResponse apiResponse = await productServiceInterface!.getBrandOrCategoryProductList(isBrand, id, offset);
+
+    // Prevent race conditions where an old slow pagination request appends to a newly opened category list
+    if (_currentCategoryOrBrandId != null && _currentCategoryOrBrandId != '${isBrand}_$id') {
+      return;
+    }
+
     if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
       if (offset == '1') {
         _brandOrCategoryProductList.clear();
+        _subCategoryList = null;
       }
       List<Product> products = [];
       if (apiResponse.response!.data is Map) {
         if (apiResponse.response!.data.containsKey('products')) {
           apiResponse.response!.data['products'].forEach((product) => products.add(Product.fromJson(product)));
+        }
+        if (offset == '1' && apiResponse.response!.data.containsKey('sub_categories') && apiResponse.response!.data['sub_categories'] != null) {
+          _subCategoryList = [];
+          apiResponse.response!.data['sub_categories'].forEach((subCategory) => _subCategoryList!.add(SubCategory.fromJson(subCategory)));
         }
       } else {
         apiResponse.response!.data.forEach((product) => products.add(Product.fromJson(product)));
@@ -546,6 +570,16 @@ int selectedProductTypeIndex = 0;
               .initCategoryData(data['categories'] is List ? data['categories'] : []);
           Provider.of<FlashDealController>(Get.context!, listen: false)
               .initFlashDealData(data);
+          
+          if (data['find_what_you_need'] != null) {
+            try {
+              if (data['find_what_you_need'] is Map) {
+                findWhatYouNeedModel = FindWhatYouNeedModel.fromJson(data['find_what_you_need']);
+              }
+            } catch (e) {
+              if (kDebugMode) print('Parsing error for find_what_you_need: $e');
+            }
+          }
         }
       } else {
         ApiChecker.checkApi(apiResponse);

@@ -34,9 +34,9 @@ class ReviewSection extends StatelessWidget {
 
 
               child: Row(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  RatingBar(rating: double.parse(details.productDetailsModel!.averageReview!), size: 18,),
+                  RatingBar(rating: double.tryParse('${details.productDetailsModel?.averageReview}') ?? 0.0, size: 18,),
                   const SizedBox(width: Dimensions.paddingSizeDefault),
-                  Text('${double.parse(details.productDetailsModel!.averageReview!).toStringAsFixed(1)} ${getTranslated('out_of_5', context)}',
+                  Text('${(double.tryParse('${details.productDetailsModel?.averageReview}') ?? 0.0).toStringAsFixed(1)} ${getTranslated('out_of_5', context)}',
                       style: textRegular.copyWith(color: Provider.of<ThemeController>(context, listen: false).darkTheme?
                       Theme.of(context).hintColor : Colors.black)),])),
 

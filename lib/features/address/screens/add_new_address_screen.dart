@@ -476,11 +476,22 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
     );
   }
   void _checkPermission(Function callback, BuildContext context) async {
-    LocationPermission permission = await Geolocator.requestPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied) {
+      try {
+        permission = await Geolocator.requestPermission();
+      } catch (e) {
+        log('Permission request in progress: $e');
+      }
+    }
     if(permission == LocationPermission.denied || permission == LocationPermission.whileInUse) {
       InkWell(onTap: () async{
         Navigator.pop(context);
-        await Geolocator.requestPermission();
+        try {
+          await Geolocator.requestPermission();
+        } catch (e) {
+          log('Permission request in progress: $e');
+        }
         _checkPermission(callback,  Get.context!);
         },
           child: AlertDialog(content: SuccessDialog(icon: Icons.location_on_outlined, title: '',

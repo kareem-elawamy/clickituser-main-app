@@ -108,11 +108,12 @@ class Seller {
     }
 
     shop = json['shop'] != null ? Shop.fromJson(json['shop']) : null;
-    // Aggregated API returns flat {id, name, image} with no shop object
+    // Aggregated API returns flat {id, name, image, shop_name} with no shop object
     // Synthesize a minimal Shop so SellerCard doesn't crash on null shop
-    if (shop == null && (json['name'] != null || json['image'] != null)) {
+    if (shop == null && (json['name'] != null || json['image'] != null || json['shop_name'] != null)) {
       shop = Shop(
-        name: json['name']?.toString(),
+        id: json['shop_id'] != null ? int.tryParse(json['shop_id'].toString()) : null,
+        name: json['shop_name']?.toString() ?? json['name']?.toString(),
         image: json['image']?.toString(),
         banner: json['image']?.toString(),
         vacationStatus: false,

@@ -30,29 +30,27 @@ class _BottomCartWidgetState extends State<BottomCartWidget> {
 
     super.initState();
 
-    if(widget.product != null && widget.product!.seller != null && widget.product!.seller!.shop!.vacationEndDate != null){
-      DateTime vacationDate = DateTime.parse(widget.product!.seller!.shop!.vacationEndDate!);
-      DateTime vacationStartDate = DateTime.parse(widget.product!.seller!.shop!.vacationStartDate!);
+    final shop = widget.product?.seller?.shop;
+
+    if(shop?.vacationStartDate != null && shop?.vacationEndDate != null){
+      DateTime vacationDate = DateTime.parse(shop!.vacationEndDate!);
+      DateTime vacationStartDate = DateTime.parse(shop.vacationStartDate!);
       final today = DateTime.now();
       final difference = vacationDate.difference(today).inDays;
       final startDate = vacationStartDate.difference(today).inDays;
 
-      if(difference >= 0 && widget.product!.seller!.shop!.vacationStatus! && startDate <= 0){
+      if(difference >= 0 && (shop.vacationStatus ?? false) && startDate <= 0){
         vacationIsOn = true;
-      }
-
-      else{
+      } else {
         vacationIsOn = false;
       }
     }
 
-    if(widget.product != null && widget.product!.seller != null && widget.product!.seller!.shop!.temporaryClose!){
+    if(shop?.temporaryClose ?? false){
       temporaryClose = true;
-    }else{
+    } else {
       temporaryClose = false;
     }
-
-
   }
 
 

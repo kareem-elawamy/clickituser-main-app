@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_widget.dart';
 
@@ -15,9 +15,9 @@ class HtmlViewScreen extends StatelessWidget {
           Expanded(child: SingleChildScrollView(
               padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
               physics: const BouncingScrollPhysics(),
-              child: Html(style: {
-                'html': Style(textAlign: TextAlign.justify)
-                }, data: url))),
+              child: HtmlWidget(
+                url ?? '',
+              ))),
         ],
       ),
     );

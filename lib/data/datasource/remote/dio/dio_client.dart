@@ -32,7 +32,7 @@ class DioClient {
       ..httpClientAdapter
       ..options.headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        if (token != null && token != 'null' && token != '') 'Authorization': 'Bearer $token',
         'Accept': 'application/json',
         AppConstants.langKey : countryCode == 'US'? 'en':countryCode!.toLowerCase(),
 
@@ -47,7 +47,7 @@ class DioClient {
     this.countryCode = countryCode;
     dio!.options.headers = {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
+      if (token != null && token != 'null' && token != '') 'Authorization': 'Bearer $token',
       AppConstants.langKey: countryCode == 'US'? 'en':countryCode.toLowerCase(),
     };
   }

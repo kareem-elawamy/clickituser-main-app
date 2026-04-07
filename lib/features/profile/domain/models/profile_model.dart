@@ -48,10 +48,10 @@ class ProfileModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     if(json['wallet_balance'] != null){
-      walletBalance = json['wallet_balance'].toDouble();
+      walletBalance = double.tryParse(json['wallet_balance'].toString());
     }
     if(json['loyalty_point'] != null){
-      loyaltyPoint = json['loyalty_point'].toDouble();
+      loyaltyPoint = double.tryParse(json['loyalty_point'].toString());
     }else{
       loyaltyPoint = 0.0;
     }

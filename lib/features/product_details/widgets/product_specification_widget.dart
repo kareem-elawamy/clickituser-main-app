@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/specification_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/theme/controllers/theme_controller.dart';
@@ -24,12 +24,15 @@ class ProductSpecificationWidget extends StatelessWidget {
         productSpecification.isNotEmpty ?
         Expanded(child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          child: Html(data: productSpecification,
-            style: {
-              "table": Style(backgroundColor: const Color.fromARGB(0x50, 0xee, 0xee, 0xee)),
-              "tr": Style(border: const Border(bottom: BorderSide(color: Colors.grey))),
-              "th": Style(padding: HtmlPaddings.symmetric(vertical: 6), backgroundColor: Colors.grey),
-              "td": Style(padding: HtmlPaddings.symmetric(vertical: 6), alignment: Alignment.topLeft)}),
+          child: HtmlWidget(
+            productSpecification,
+            customStylesBuilder: (element) {
+              if (element.localName == 'table') return {'background-color': '#f2f2f2'};
+              if (element.localName == 'th') return {'background-color': '#cccccc', 'padding': '6px'};
+              if (element.localName == 'td') return {'padding': '6px'};
+              return null;
+            },
+          ),
         )) :
         const Center(child: Text('No specification')),
         const SizedBox(height: Dimensions.paddingSizeDefault),

@@ -166,9 +166,9 @@ class ConfigModel {
       });
     }
     termsConditions = json['terms_&_conditions'];
-    refundPolicy = json['refund_policy'] != null ? RefundPolicy.fromJson(json['refund_policy']) : null;
-    returnPolicy = json['return_policy'] != null ? RefundPolicy.fromJson(json['return_policy']) : null;
-    cancellationPolicy = json['cancellation_policy'] != null ? RefundPolicy.fromJson(json['cancellation_policy']) : null;
+    refundPolicy = json['refund_policy'] != null && json['refund_policy'] is Map ? RefundPolicy.fromJson(json['refund_policy']) : null;
+    returnPolicy = json['return_policy'] != null && json['return_policy'] is Map ? RefundPolicy.fromJson(json['return_policy']) : null;
+    cancellationPolicy = json['cancellation_policy'] != null && json['cancellation_policy'] is Map ? RefundPolicy.fromJson(json['cancellation_policy']) : null;
     if (json['currency_list'] != null) {
       currencyList = <CurrencyList>[];
       json['currency_list'].forEach((v) {

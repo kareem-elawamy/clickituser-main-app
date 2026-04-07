@@ -224,12 +224,16 @@ class CartScreenState extends State<CartScreen> {
 
                                 }
 
-                              for(int index = 0; index < sellerGroupList.length; index++) {
-                                if(sellerGroupList[index].quantity! > sellerGroupList[index].productInfo!.totalCurrentStock! && sellerGroupList[index].productType =="physical") {
-                                  stockOutProduct = true;
+                              for(int index = 0; index < cartProductList.length; index++) {
+                                for(CartModel cart in cartProductList[index]) {
+                                  if(cart.quantity! > cart.productInfo!.totalCurrentStock! && cart.productType =="physical") {
+                                    stockOutProduct = true;
+                                    break;
+                                  }
+                                }
+                                if(stockOutProduct) {
                                   break;
                                 }
-
                               }
 
                               for(int index = 0; index < sellerGroupList.length; index++) {
