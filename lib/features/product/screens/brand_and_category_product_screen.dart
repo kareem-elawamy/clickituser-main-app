@@ -87,6 +87,7 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
                     var subCategory = productController.subCategoryList![index];
                     return InkWell(
                       onTap: () {
+                         Provider.of<ProductController>(context, listen: false).clearBrandOrCategoryProductList();
                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BrandAndCategoryProductScreen(
                            isBrand: false,
                            id: subCategory.id.toString(),

@@ -245,14 +245,20 @@ class Product {
 
     if(json['images'] != null){
       try{
-        _images = json['images'] != null ? json['images'].cast<String>() : [];
+        List<String> parsed = json['images'] != null ? json['images'].cast<String>() : [];
+        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
       }catch(e){
-        _images = json['images'] != null ? jsonDecode(json['images']).cast<String>() : [];
+        List<String> parsed = json['images'] != null ? jsonDecode(json['images']).cast<String>() : [];
+        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
       }
 
     }
 
-    _thumbnail = json['thumbnail'];
+    if (json['thumbnail'] != null && '${json['thumbnail']}'.startsWith('http')) {
+      _thumbnail = '${json['thumbnail']}'.split('/').last;
+    } else {
+      _thumbnail = json['thumbnail'];
+    }
     thumbnailFullUrl = json['thumbnail_full_url'] != null ? ImageFullUrl.fromJson(json['thumbnail_full_url']) : null;
     if (json['images_full_url'] != null) {
       imagesFullUrl = [];

@@ -220,8 +220,18 @@ int selectedProductTypeIndex = 0;
   bool _hasMoreBrandOrCategoryProduct = true;
   bool get hasMoreBrandOrCategoryProduct => _hasMoreBrandOrCategoryProduct;
 
+  String? _currentCategoryOrBrandId;
+
+  void clearBrandOrCategoryProductList() {
+    _brandOrCategoryProductList.clear();
+    _isBrandOrCategoryProductLoading = true;
+    _hasData = true;
+    notifyListeners();
+  }
+
   void initBrandOrCategoryProductList(bool isBrand, String id, BuildContext context, {String offset = '1'}) async {
     if (offset == '1') {
+      _currentCategoryOrBrandId = '${isBrand}_$id';
       _brandOrCategoryProductList.clear();
       _hasData = true;
       _hasMoreBrandOrCategoryProduct = true;
@@ -232,6 +242,12 @@ int selectedProductTypeIndex = 0;
     });
     
     ApiResponse apiResponse = await productServiceInterface!.getBrandOrCategoryProductList(isBrand, id, offset);
+
+    // Prevent race conditions where an old slow pagination request appends to a newly opened category list
+    if (_currentCategoryOrBrandId != null && _currentCategoryOrBrandId != '${isBrand}_$id') {
+      return;
+    }
+
     if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
       if (offset == '1') {
         _brandOrCategoryProductList.clear();

@@ -349,10 +349,12 @@ class ProductDetailsModel {
     _digitalFileReady = json['digital_file_ready'];
     if (json['images'] != null) {
       try {
-        _images = json['images'].cast<String>();
+        List<String> parsed = json['images'].cast<String>();
+        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
       } catch (e) {
         try {
-          _images = jsonDecode(json['images']).cast<String>();
+          List<String> parsed = jsonDecode(json['images']).cast<String>();
+          _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
         } catch (e) {
           _images = [];
         }
@@ -372,7 +374,11 @@ class ProductDetailsModel {
         });
       }
     }
-    _thumbnail = json['thumbnail'];
+    if (json['thumbnail'] != null && '${json['thumbnail']}'.startsWith('http')) {
+      _thumbnail = '${json['thumbnail']}'.split('/').last;
+    } else {
+      _thumbnail = json['thumbnail'];
+    }
     _featured = json['featured'];
     _videoProvider = json['video_provider'];
     _videoUrl = json['video_url'];
