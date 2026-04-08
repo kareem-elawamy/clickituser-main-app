@@ -105,7 +105,7 @@ class _TopSellerProductScreenState extends State<TopSellerProductScreen> with Ti
                   sellerId: widget.sellerId!,
                   banner: widget.banner ?? '',
                   shopImage: widget.image ?? '',
-                  temporaryClose: widget.temporaryClose!)),
+                  temporaryClose: widget.temporaryClose ?? false,)),
             SliverPersistentHeader(pinned: true,
                 delegate: SliverDelegate(
                     height: sellerProvider.shopMenuIndex == 1? 110: 40,
@@ -143,7 +143,7 @@ class _TopSellerProductScreenState extends State<TopSellerProductScreen> with Ti
                                 left: Provider.of<LocalizationController>(context, listen: false).isLtr ? 0 : Dimensions.paddingSizeDefault),
                               child: InkWell(onTap: () => showModalBottomSheet(context: context,
                                   isScrollControlled: true, backgroundColor: Colors.transparent,
-                                  builder: (c) =>  ProductFilterDialog(sellerId: widget.sellerId!)),
+                                  builder: (c) =>  ProductFilterDialog(sellerId: widget.sellerId ?? 0)),
 
                                 child: Container(decoration: BoxDecoration(
                                     color: Provider.of<ThemeController>(context, listen: false).darkTheme? Colors.white: Theme.of(context).cardColor,
@@ -156,14 +156,14 @@ class _TopSellerProductScreenState extends State<TopSellerProductScreen> with Ti
 
                         if(sellerProvider.shopMenuIndex == 1)
                           Container(color: Theme.of(context).canvasColor,
-                            child: SearchWidget(hintText: '${getTranslated('search_hint', context)}', sellerId: widget.sellerId!))
+                            child: SearchWidget(hintText: '${getTranslated('search_hint', context)}', sellerId: widget.sellerId ?? 0),)
                       ])))),
 
             SliverToBoxAdapter(child: sellerProvider.shopMenuIndex == 0?
-                ShopOverviewScreen(sellerId: widget.sellerId!, scrollController: _scrollController,):
+                ShopOverviewScreen(sellerId: widget.sellerId ?? 0, scrollController: _scrollController,):
 
               Padding(padding: const EdgeInsets.fromLTRB( Dimensions.paddingSizeSmall,  Dimensions.paddingSizeSmall,  Dimensions.paddingSizeSmall,0),
-                child: ShopProductViewList(scrollController: _scrollController, sellerId: widget.sellerId!))),
+                child: ShopProductViewList(scrollController: _scrollController, sellerId: widget.sellerId ?? 0))),
 
           ]);
         }
