@@ -51,11 +51,7 @@ class BrandListWidget extends StatelessWidget {
                             child: CustomImageWidget(
                               image: () {
                                 final img = brandProvider.brandList[index].image;
-                                if (img == null || img.isEmpty) {
-                                  return 'http://127.0.0.1:8000/storage/app/public/category/2026-01-16-6969eaf409dd9.webp';
-                                }
-                                // If already a full URL, use directly; otherwise prepend base URL
-                                if (img.startsWith('http')) return img;
+                                if (img != null && img.startsWith('http')) return img;
                                 return '${Provider.of<SplashController>(context, listen: false).baseUrls?.brandImageUrl ?? ''}/$img';
                               }(),
                             )),

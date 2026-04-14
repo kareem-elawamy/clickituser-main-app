@@ -39,27 +39,38 @@ class SplashScreenState extends State<SplashScreen> {
 
     try {
       bool firstTime = true;
-      _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        if(!firstTime) {
-          bool isNotConnected = result != ConnectivityResult.wifi && result != ConnectivityResult.mobile;
-          isNotConnected ? const SizedBox() : ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      _onConnectivityChanged = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        if (!firstTime) {
+          bool isNotConnected = result != ConnectivityResult.wifi &&
+              result != ConnectivityResult.mobile;
+          isNotConnected
+              ? const SizedBox()
+              : ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: isNotConnected ? Colors.red : Colors.green,
-            duration: Duration(seconds: isNotConnected ? 6000 : 3),
-            content: Text(isNotConnected ? getTranslated('no_connection', context)! : getTranslated('connected', context)!,
-              textAlign: TextAlign.center)));
-          if(!isNotConnected) {
+              backgroundColor: isNotConnected ? Colors.red : Colors.green,
+              duration: Duration(seconds: isNotConnected ? 6000 : 3),
+              content: Text(
+                  isNotConnected
+                      ? getTranslated('no_connection', context)!
+                      : getTranslated('connected', context)!,
+                  textAlign: TextAlign.center)));
+          if (!isNotConnected) {
             // Only re-route if config hasn't already been fetched
-            if (Provider.of<SplashController>(context, listen: false).configModel == null) {
+            if (Provider.of<SplashController>(context, listen: false)
+                    .configModel ==
+                null) {
               _route();
             } else {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const DashBoardScreen()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (_) => const DashBoardScreen()));
             }
           }
         }
         firstTime = false;
       });
-    } catch(_) {}
+    } catch (_) {}
 
     _route();
   }
@@ -71,42 +82,66 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void _route() {
-    Provider.of<SplashController>(context, listen: false).initConfig(context).then((bool isSuccess) {
-      if(isSuccess) {
-        Provider.of<SplashController>(Get.context!, listen: false).initSharedPrefData();
+    Provider.of<SplashController>(context, listen: false)
+        .initConfig(context)
+        .then((bool isSuccess) {
+      if (isSuccess) {
+        Provider.of<SplashController>(Get.context!, listen: false)
+            .initSharedPrefData();
         Timer(const Duration(seconds: 1), () {
-          if(Provider.of<SplashController>(Get.context!, listen: false).configModel!.maintenanceMode!) {
-            Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(builder: (_) => const MaintenanceScreen()));
-          }
-          else if(Provider.of<AuthController>(Get.context!, listen: false).isLoggedIn()){
-            Provider.of<AuthController>(Get.context!, listen: false).updateToken(Get.context!);
-            if(widget.body != null){
+          if (Provider.of<SplashController>(Get.context!, listen: false)
+              .configModel!
+              .maintenanceMode!) {
+            Navigator.of(Get.context!).pushReplacement(
+                MaterialPageRoute(builder: (_) => const MaintenanceScreen()));
+          } else if (Provider.of<AuthController>(Get.context!, listen: false)
+              .isLoggedIn()) {
+            Provider.of<AuthController>(Get.context!, listen: false)
+                .updateToken(Get.context!);
+            if (widget.body != null) {
               if (widget.body!.type == 'order') {
-                Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>
-                    OrderDetailsScreen(orderId: widget.body!.orderId)));
-              }else if(widget.body!.type == 'notification'){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>
-                const NotificationScreen()));
-              }else {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>
-                const InboxScreen(isBackButtonExist: true,)));
+                Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        OrderDetailsScreen(orderId: widget.body!.orderId)));
+              } else if (widget.body!.type == 'notification') {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        const NotificationScreen()));
+              } else {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) => const InboxScreen(
+                          isBackButtonExist: true,
+                        )));
               }
-            }else{
-              Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const DashBoardScreen()));
+            } else {
+              Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const DashBoardScreen()));
             }
-          }
-
-          else if(Provider.of<SplashController>(Get.context!, listen: false).showIntro()!){
-            Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => OnBoardingScreen(
-              indicatorColor: ColorResources.grey, selectedIndicatorColor: Theme.of(context).primaryColor)));
-          }
-          else{
-            if(Provider.of<AuthController>(context, listen: false).getGuestToken() != null &&
-                Provider.of<AuthController>(context, listen: false).getGuestToken() != '1'){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const DashBoardScreen()));
-            }else{
-              Provider.of<AuthController>(context, listen: false).getGuestIdUrl();
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const DashBoardScreen()), (route) => false);
+          } else if (Provider.of<SplashController>(Get.context!, listen: false)
+              .showIntro()!) {
+            Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => OnBoardingScreen(
+                    indicatorColor: ColorResources.grey,
+                    selectedIndicatorColor: Theme.of(context).primaryColor)));
+          } else {
+            if (Provider.of<AuthController>(context, listen: false)
+                        .getGuestToken() !=
+                    null &&
+                Provider.of<AuthController>(context, listen: false)
+                        .getGuestToken() !=
+                    '1') {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const DashBoardScreen()));
+            } else {
+              Provider.of<AuthController>(context, listen: false)
+                  .getGuestIdUrl();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const DashBoardScreen()),
+                  (route) => false);
             }
           }
         });
@@ -116,19 +151,25 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _globalKey,
-      body: Provider.of<SplashController>(context).hasConnection ?
-      Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
-        BouncyWidget(
-            duration: const Duration(milliseconds: 2000), lift: 50, ratio: 0.5, pause: 0.25,
-            child: SizedBox(width: 150, child: Image.asset(Images.icon, width: 250.0))),
-        const SizedBox(height: 24),
-        const CircularProgressIndicator(),
-      ]),
-      ) : const NoInternetOrDataScreenWidget(isNoInternet: true, child: SplashScreen()),
+      body: Provider.of<SplashController>(context).hasConnection
+          ? Center(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                BouncyWidget(
+                    duration: const Duration(milliseconds: 2000),
+                    lift: 50,
+                    ratio: 0.5,
+                    pause: 0.25,
+                    child: SizedBox(
+                        width: 150,
+                        child: Image.asset(Images.icon, width: 250.0))),
+                const SizedBox(height: 24),
+                const CircularProgressIndicator(),
+              ]),
+            )
+          : const NoInternetOrDataScreenWidget(
+              isNoInternet: true, child: SplashScreen()),
     );
   }
-
 }

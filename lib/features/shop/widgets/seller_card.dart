@@ -75,10 +75,7 @@ class _SellerCardState extends State<SellerCard> {
                   child: CustomImageWidget(
                     image: () {
                       final banner = widget.sellerModel?.shop?.banner;
-                      if (banner == null || banner.isEmpty || banner.contains('status: 404')) {
-                        return 'http://127.0.0.1:8000/storage/app/public/category/2026-01-16-6969eaf409dd9.webp';
-                      }
-                      if (banner.startsWith('http')) return banner;
+                      if (banner != null && banner.startsWith('http')) return banner;
                       return '${splashController.baseUrls?.shopImageUrl ?? ''}/banner/$banner';
                     }(),
                   ))),
@@ -100,10 +97,7 @@ class _SellerCardState extends State<SellerCard> {
                               child: CustomImageWidget(
                                   image: () {
                                     final img = widget.sellerModel?.shop?.image;
-                                    if (img == null || img.isEmpty || img.contains('status: 404')) {
-                                      return 'http://127.0.0.1:8000/storage/app/public/category/2026-01-16-6969eaf409dd9.jpg';
-                                    }
-                                    if (img.startsWith('http')) return img;
+                                    if (img != null && img.startsWith('http')) return img;
                                     return '${splashController.baseUrls?.shopImageUrl ?? ''}/$img';
                                   }(),
                                   width: 60, height: 60))),
