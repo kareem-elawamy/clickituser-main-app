@@ -171,33 +171,33 @@ class _MoreScreenState extends State<MoreScreen> {
 
                         MenuButtonWidget(image: Images.termCondition, title: getTranslated('terms_condition', context),
                             navigateTo: HtmlViewScreen(title: getTranslated('terms_condition', context),
-                              url: Provider.of<SplashController>(context, listen: false).configModel!.termsConditions,)),
+                              url: Provider.of<SplashController>(context, listen: false).configModel?.termsConditions,)),
 
                         MenuButtonWidget(image: Images.privacyPolicy, title: getTranslated('privacy_policy', context),
                             navigateTo: HtmlViewScreen(title: getTranslated('privacy_policy', context),
-                              url: Provider.of<SplashController>(context, listen: false).configModel!.privacyPolicy,)),
+                              url: Provider.of<SplashController>(context, listen: false).configModel?.privacyPolicy,)),
 
-                        if(Provider.of<SplashController>(context, listen: false).configModel!.refundPolicy!.status ==1)
+                        if(Provider.of<SplashController>(context, listen: false).configModel?.refundPolicy?.status ==1)
                           MenuButtonWidget(image: Images.termCondition, title: getTranslated('refund_policy', context),
                               navigateTo: HtmlViewScreen(title: getTranslated('refund_policy', context),
-                                url: Provider.of<SplashController>(context, listen: false).configModel!.refundPolicy!.content,)),
+                                url: Provider.of<SplashController>(context, listen: false).configModel?.refundPolicy?.content,)),
 
-                        if(Provider.of<SplashController>(context, listen: false).configModel!.returnPolicy!.status ==1)
+                        if(Provider.of<SplashController>(context, listen: false).configModel?.returnPolicy?.status ==1)
                           MenuButtonWidget(image: Images.termCondition, title: getTranslated('return_policy', context),
                               navigateTo: HtmlViewScreen(title: getTranslated('return_policy', context),
-                                url: Provider.of<SplashController>(context, listen: false).configModel!.returnPolicy!.content,)),
+                                url: Provider.of<SplashController>(context, listen: false).configModel!.returnPolicy?.content,)),
 
-                        if(Provider.of<SplashController>(context, listen: false).configModel!.cancellationPolicy!.status ==1)
+                        if(Provider.of<SplashController>(context, listen: false).configModel?.cancellationPolicy?.status ==1)
                           MenuButtonWidget(image: Images.termCondition, title: getTranslated('cancellation_policy', context),
                               navigateTo: HtmlViewScreen(title: getTranslated('cancellation_policy', context),
-                                url: Provider.of<SplashController>(context, listen: false).configModel!.cancellationPolicy!.content,)),
+                                url: Provider.of<SplashController>(context, listen: false).configModel?.cancellationPolicy?.content,)),
 
                         MenuButtonWidget(image: Images.faq, title: getTranslated('faq', context),
                             navigateTo: FaqScreen(title: getTranslated('faq', context),)),
 
                         MenuButtonWidget(image: Images.user, title: getTranslated('about_us', context),
                             navigateTo: HtmlViewScreen(title: getTranslated('about_us', context),
-                              url: Provider.of<SplashController>(context, listen: false).configModel!.aboutUs,))]))),
+                              url: Provider.of<SplashController>(context, listen: false).configModel?.aboutUs,))]))),
 
 
               ListTile(

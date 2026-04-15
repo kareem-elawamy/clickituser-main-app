@@ -5,7 +5,7 @@ class AppConstants {
   static const String appName = 'Click It';
   static const String slogan = 'Select and Shop';
   static const String appVersion = '14.4';
-  static const String baseUrl = 'http://192.168.1.11:8000';
+  static const String baseUrl = 'https://oman.clickt.net/';
   static const String userId = 'userId';
   static const String name = 'name';
   static const String homeDataUri = '/api/v1/get-home-data';
