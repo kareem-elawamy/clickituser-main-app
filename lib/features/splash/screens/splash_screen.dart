@@ -9,6 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/main.dart';
 import 'package:flutter_sixvalley_ecommerce/push_notification/models/notification_body.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
@@ -119,7 +120,7 @@ class SplashScreenState extends State<SplashScreen> {
                       const DashBoardScreen()));
             }
           } else if (Provider.of<SplashController>(Get.context!, listen: false)
-              .showIntro()!) {
+              .showIntro()! && AppConfig.useGateway) {
             Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => OnBoardingScreen(
                     indicatorColor: ColorResources.grey,

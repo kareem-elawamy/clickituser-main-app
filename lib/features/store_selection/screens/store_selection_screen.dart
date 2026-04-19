@@ -28,25 +28,23 @@ class StoreSelectionScreen extends StatefulWidget {
 }
 
 class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
-  final List<String> _brands = ['ladychic', 'velvey', 'veraalux', 'vivo'];
   final List<String> _countries = ['oman', 'uae', 'saudi', 'qatar', 'kuwait', 'bahrain', 'iraq', 'syria', 'lebanon', 'jordan'];
 
-  String? _selectedBrand;
   String? _selectedCountry;
   bool _isLoading = false;
 
   void _onContinue() {
-    if (_selectedBrand == null || _selectedCountry == null) {
+    if (_selectedCountry == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please select both a brand and a country.'),
+          content: Text('Please select a country.'),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    bool isSuccess = GatewayService.setDynamicApiBaseUrl(_selectedBrand!, _selectedCountry!, context);
+    bool isSuccess = GatewayService.setDynamicApiBaseUrl(_selectedCountry!, context);
 
     if (isSuccess) {
       Navigator.of(context).pushReplacement(
@@ -82,42 +80,11 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                 ),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
                 Text(
-                  'Please select your preferred brand and region to continue',
+                  'Please select your preferred region to continue',
                   textAlign: TextAlign.center,
                   style: titilliumRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).hintColor),
                 ),
                 const SizedBox(height: 40),
-
-                // Brand Dropdown
-                Text('Select Brand', style: titilliumSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                const SizedBox(height: Dimensions.paddingSizeSmall),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).highlightColor,
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                    border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2)),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      hint: const Text('Choose a Brand'),
-                      value: _selectedBrand,
-                      items: _brands.map((String brand) {
-                        return DropdownMenuItem<String>(
-                          value: brand,
-                          child: Text(brand.toUpperCase(), style: titilliumRegular),
-                        );
-                      }).toList(),
-                      onChanged: _isLoading ? null : (String? newValue) {
-                        setState(() {
-                          _selectedBrand = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Dimensions.paddingSizeLarge),
 
                 // Country Dropdown
                 Text('Select Country/Region', style: titilliumSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge)),

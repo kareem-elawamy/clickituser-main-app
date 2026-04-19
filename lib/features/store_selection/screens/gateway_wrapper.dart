@@ -3,6 +3,10 @@ import 'package:flutter_sixvalley_ecommerce/push_notification/models/notificatio
 import 'package:flutter_sixvalley_ecommerce/utill/gateway_service.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/screens/splash_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/store_selection/screens/store_selection_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
+import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
+import 'package:flutter_sixvalley_ecommerce/di_container.dart' as di;
 
 class GatewayWrapper extends StatefulWidget {
   final NotificationBody? body;
@@ -20,6 +24,26 @@ class _GatewayWrapperState extends State<GatewayWrapper> {
   }
 
   void _initializeApp() async {
+    if (!AppConfig.useGateway) {
+      if (AppConfig.currentBrand == 'umart') {
+        const String umartUrl = 'https://umart.ussus.net';
+        AppConstants.baseUrl = umartUrl;
+        
+        try {
+           di.sl<DioClient>().updateBaseUrl(umartUrl);
+        } catch(e) {
+           // Client may not be registered yet depending on startup order.
+        }
+      }
+      
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => SplashScreen(body: widget.body)),
+        );
+      }
+      return;
+    }
+
     // 1. Fetch current active stores online (cached to SharedPreferences)
     await GatewayService.fetchAndCacheStores();
 

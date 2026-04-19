@@ -38,6 +38,36 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "brand"
+
+    productFlavors {
+        create("velvey") {
+            dimension = "brand"
+            applicationId = "com.ussus.velvey"
+            resValue("string", "app_name", "Velvey")
+        }
+        create("umart") {
+            dimension = "brand"
+            applicationId = "com.ussus.umart"
+            resValue("string", "app_name", "Umart")
+        }
+        create("ladychic") {
+            dimension = "brand"
+            applicationId = "com.ussus.ladychic"
+            resValue("string", "app_name", "LadyChic")
+        }
+        create("vivo") {
+            dimension = "brand"
+            applicationId = "com.ussus.vivo"
+            resValue("string", "app_name", "VIVO")
+        }
+        create("veraalux") {
+            dimension = "brand"
+            applicationId = "com.ussus.veraalux"
+            resValue("string", "app_name", "Veraalux")
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
