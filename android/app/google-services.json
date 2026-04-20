@@ -10,117 +10,66 @@
       "client_info": {
         "mobilesdk_app_id": "1:72773297730:android:3db20baface4ec297b2fdb",
         "android_client_info": {
-          "package_name": "com.clickit.clickitdelivery"
+          "package_name": "com.ussus.velvey"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
       "api_key": [
         {
           "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "client_info": {
         "mobilesdk_app_id": "1:72773297730:android:cc89b99020597c027b2fdb",
         "android_client_info": {
-          "package_name": "com.clickit.clickituserapp"
+          "package_name": "com.ussus.ladychic"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
       "api_key": [
         {
           "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "client_info": {
         "mobilesdk_app_id": "1:72773297730:android:cde59bdb899a5b2f7b2fdb",
         "android_client_info": {
-          "package_name": "com.clickit.clickitvendor"
+          "package_name": "com.ussus.vivo"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
       "api_key": [
         {
           "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "client_info": {
         "mobilesdk_app_id": "1:72773297730:android:60af254269f403007b2fdb",
         "android_client_info": {
-          "package_name": "com.clickituser.clickituserapp"
+          "package_name": "com.ussus.veraalux"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
       "api_key": [
         {
           "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "72773297730-gjrmpg5n5mqqcaal4l0rv7ifae2pqqi8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72773297730:android:12345678901234567890ab",
+        "android_client_info": {
+          "package_name": "com.ussus.umart"
         }
-      }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w"
+        }
+      ]
     }
   ],
   "configuration_version": "1"

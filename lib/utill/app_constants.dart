@@ -5,7 +5,11 @@ class AppConstants {
   static const String appName = 'Click It';
   static const String slogan = 'Select and Shop';
   static const String appVersion = '14.4';
-  static String baseUrl = 'https://oman.clickt.net';
+  /// Base URL is intentionally empty at startup.
+  /// It is set at runtime by GatewayWrapper via GatewayService (gateway brands)
+  /// or directly to 'https://umart.ussus.net' for the umart flavor.
+  /// Never hardcode a clickt URL here.
+  static String baseUrl = '';
   static const String userId = 'userId';
   static const String name = 'name';
   static const String homeDataUri = '/api/v1/get-home-data';

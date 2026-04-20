@@ -29,7 +29,8 @@ import 'package:flutter_sixvalley_ecommerce/features/reorder/controllers/re_orde
 import 'package:flutter_sixvalley_ecommerce/features/review/controllers/review_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shipping/controllers/shipping_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
-import 'package:flutter_sixvalley_ecommerce/features/splash/screens/splash_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/features/store_selection/screens/gateway_wrapper.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
 import 'package:flutter_sixvalley_ecommerce/features/support/controllers/support_ticket_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/wallet/controllers/wallet_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/wishlist/controllers/wishlist_controller.dart';
@@ -165,7 +166,7 @@ class MyApp extends StatelessWidget {
       locals.add(Locale(language.languageCode!, language.countryCode));
     }
     return MaterialApp(
-      title: AppConstants.appName,
+      title: AppConfig.appName,
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeController>(context).darkTheme ? dark(primaryColor: primaryColor) : light(primaryColor: primaryColor),
@@ -181,7 +182,7 @@ class MyApp extends StatelessWidget {
         return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling), child: child!);
       },
       supportedLocales: locals,
-      home: SplashScreen(body: body,),
+      home: GatewayWrapper(body: body),
     );
   }
 }

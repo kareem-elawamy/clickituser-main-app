@@ -7,6 +7,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
 import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
 import 'package:flutter_sixvalley_ecommerce/di_container.dart' as di;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GatewayWrapper extends StatefulWidget {
   final NotificationBody? body;
@@ -25,17 +26,37 @@ class _GatewayWrapperState extends State<GatewayWrapper> {
 
   void _initializeApp() async {
     if (!AppConfig.useGateway) {
+      // ── Umart: permanently anchored to Syria ────────────────────────────
+      // The country is NEVER chosen by the user. It is hardcoded here and
+      // written to SharedPreferences on every cold start so that any code
+      // reading the cache (e.g. GatewayService.initFromCache) always sees a
+      // valid, brand-matching Syria selection.
       if (AppConfig.currentBrand == 'umart') {
-        const String umartUrl = 'https://umart.ussus.net';
+        const String umartUrl    = 'https://umart.ussus.net';
+        const String umartCountry = 'syria'; // matches gateway store country_code
+        const String umartLang   = 'ar';
+
+        // 1. Apply base URL in-memory
         AppConstants.baseUrl = umartUrl;
-        
         try {
-           di.sl<DioClient>().updateBaseUrl(umartUrl);
-        } catch(e) {
-           // Client may not be registered yet depending on startup order.
+          di.sl<DioClient>().updateBaseUrl(umartUrl);
+        } catch (_) {
+          // DioClient may not yet be registered on very first frame; harmless.
+        }
+
+        // 2. Persist the Syria lock so nothing else ever prompts for a country
+        try {
+          final prefs = di.sl<SharedPreferences>();
+          await prefs.setString(GatewayService.selectedCountryKey, umartCountry);
+          await prefs.setString(GatewayService.selectedLangKey,    umartLang);
+          await prefs.setString(GatewayService.selectedBrandKey,   AppConfig.currentBrand);
+        } catch (_) {
+          // SharedPreferences not yet available; not critical as URL is set above.
         }
       }
-      
+
+      // Go directly to SplashScreen — StoreSelectionScreen is NEVER shown
+      // for non-gateway (Umart) flavors.
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => SplashScreen(body: widget.body)),
