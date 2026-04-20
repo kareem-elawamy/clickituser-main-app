@@ -51,6 +51,9 @@ class DioClient {
       AppConstants.langKey: countryCode == 'US'? 'en':countryCode.toLowerCase(),
     };
   }
+  void updateBaseUrl(String newBaseUrl) {
+    dio!.options.baseUrl = newBaseUrl;
+  }
 
   Future<Response> get(String uri, {
     Map<String, dynamic>? queryParameters,

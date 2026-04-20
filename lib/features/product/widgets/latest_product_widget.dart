@@ -42,10 +42,7 @@ class LatestProductWidget extends StatelessWidget {
                   child: CustomImageWidget(
                     image: () {
                       final thumb = productModel.thumbnail;
-                      if (thumb == null || thumb.isEmpty) {
-                        return 'http://127.0.0.1:8000/storage/app/public/category/2026-01-16-6969eaf409dd9.webp';
-                      }
-                      if (thumb.startsWith('http')) return thumb;
+                      if (thumb != null && thumb.startsWith('http')) return thumb;
                       return '${splashController.baseUrls?.productThumbnailUrl ?? ''}/$thumb';
                     }(),
                   )
