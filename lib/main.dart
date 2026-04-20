@@ -68,7 +68,7 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
         apiKey: 'AIzaSyB9xfwyNPqAeDUXDfCvuOk5DZjsiuhU_4w',
-        appId: '1:72773297730:web:cc89b99020597c027b2fdb', // You may need to change `:web:` App ID from Firebase console if Analytics fails
+        appId: '1:72773297730:web:cc89b99020597c027b2fdb', //You may need to change `:web:` App ID from Firebase console if Analytics fails
         messagingSenderId: '72773297730',
         projectId: 'clickit-2688c',
         authDomain: 'clickit-2688c.firebaseapp.com',
@@ -147,7 +147,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final NotificationBody? body;
   const MyApp({super.key, required this.body});
-
 
   @override
   Widget build(BuildContext context) {
