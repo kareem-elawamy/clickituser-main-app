@@ -8,6 +8,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/no_internet_screen_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,8 +31,7 @@ class OffersBannerScreen extends StatelessWidget {
                   child: Container(margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: ClipRRect(borderRadius: BorderRadius.circular(10),
-                      child: CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls!.bannerImageUrl}'
-                      '/${banner.footerBannerList![index].photo}', height: 150, width: MediaQuery.of(context).size.width))));}),
+                      child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl, banner.footerBannerList![index].photo), height: 150, width: MediaQuery.of(context).size.width))));}),
           ) : const Center(child: NoInternetOrDataScreenWidget(isNoInternet: false, message: 'currently_no_offers_available',icon: Images.noOffer,)) : const OfferShimmer();
         },
       ),

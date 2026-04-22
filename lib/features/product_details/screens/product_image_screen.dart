@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/controllers/product_details_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class ProductImageScreenState extends State<ProductImageScreen> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
-                    imageProvider: NetworkImage('${Provider.of<SplashController>(context,listen: false).baseUrls!.productImageUrl}/${widget.imageList![index]}'),
+                    imageProvider: NetworkImage(getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.productImageUrl, widget.imageList![index])),
                     initialScale: PhotoViewComputedScale.contained,
                     heroAttributes: PhotoViewHeroAttributes(tag: index.toString()),
                   );

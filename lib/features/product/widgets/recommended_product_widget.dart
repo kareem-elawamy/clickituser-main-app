@@ -12,6 +12,7 @@ import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widge
 import 'package:flutter_sixvalley_ecommerce/features/home/shimmers/recommended_product_shimmer.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/widgets/favourite_button_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -87,7 +88,7 @@ class RecommendedProductWidget extends StatelessWidget {
                                         borderRadius: const BorderRadius.all(Radius.circular(5))),
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                                      child: CustomImageWidget(image: '${splashController.baseUrls!.productThumbnailUrl}/${recommended.recommendedProduct!.thumbnail}')
+                                      child: CustomImageWidget(image: getFullImageUrl(splashController.baseUrls?.productThumbnailUrl, recommended.recommendedProduct!.thumbnail))
                                     )):const SizedBox(),
 
                                   const SizedBox(width: Dimensions.paddingSizeDefault),

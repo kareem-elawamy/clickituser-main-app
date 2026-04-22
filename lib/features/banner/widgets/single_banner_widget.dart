@@ -3,6 +3,7 @@ import 'package:flutter_sixvalley_ecommerce/features/banner/controllers/banner_c
 import 'package:flutter_sixvalley_ecommerce/features/banner/domain/models/banner_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -32,8 +33,7 @@ class SingleBannersWidget extends StatelessWidget {
                 decoration:  BoxDecoration(borderRadius: BorderRadius.all(noRadius?
                 const Radius.circular(0): const Radius.circular(5))),
                 child: ClipRRect(borderRadius: BorderRadius.all(Radius.circular(noRadius?0:5)),
-                  child: CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl}'
-                      '/${bannerModel?.photo}')))));
+                  child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl, bannerModel?.photo))))));
     },
     ),],
     );

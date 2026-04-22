@@ -14,6 +14,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/not_logged_in_bottom_sheet_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/widgets/favourite_button_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -55,7 +56,7 @@ class ProductImageWidget extends StatelessWidget {
                               borderRadius:BorderRadius.circular(Dimensions.paddingSizeSmall),
                               child: CustomImageWidget(height: MediaQuery.of(context).size.width,
                                   width: MediaQuery.of(context).size.width,
-                                  image: '${splashController.baseUrls!.productImageUrl}/${productModel!.images![index]}'),
+                                  image: getFullImageUrl(splashController.baseUrls?.productImageUrl, productModel!.images![index])),
                             );
                           },
                           onPageChanged: (index) => productController.setImageSliderSelectedIndex(index),
@@ -150,7 +151,7 @@ class ProductImageWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall)),
                           child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                             child: CustomImageWidget(height: 50, width: 50,
-                                image: '${splashController.baseUrls!.productImageUrl}/${productModel!.images![index]}'),
+                                image: getFullImageUrl(splashController.baseUrls?.productImageUrl, productModel!.images![index])),
                           )))));
                 },),
             ),

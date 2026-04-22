@@ -184,8 +184,8 @@ class Product {
   int? get refundable => _refundable;
   String? get digitalProductType => _digitalProductType;
   String? get digitalFileReady => _digitalFileReady;
-  List<String>? get images => (imagesFullUrl?.any((e) => e.status == 404) ?? false) ? ['status: 404'] : _images;
-  String? get thumbnail => (thumbnailFullUrl?.status == 404) ? 'status: 404' : _thumbnail;
+  List<String>? get images => _images;
+  String? get thumbnail => _thumbnail;
   List<ProductColors>? get colors => _colors;
   List<String>? get attributes => _attributes;
   List<ChoiceOptions>? get choiceOptions => _choiceOptions;
@@ -209,9 +209,9 @@ class Product {
   int? get minimumOrderQuantity => _minimumOrderQty;
 
   Product.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
+    _id = _parseIntSafe(json['id']);
     _addedBy = json['added_by'];
-    _userId = json['user_id'];
+    _userId = _parseIntSafe(json['user_id']);
     _name = json['name'];
     _slug = json['slug'];
     _productType = json['product_type'];
@@ -231,10 +231,10 @@ class Product {
       }
     }
     _unit = json['unit'];
-    _minQty = int.tryParse(json['min_qty']?.toString() ?? '0');
+    _minQty = _parseIntSafe(json['min_qty']);
 
     if(json['refundable']!=null){
-      _refundable = int.tryParse(json['refundable'].toString());
+      _refundable = _parseIntSafe(json['refundable']);
     }
     if(json['digital_product_type']!=null){
       _digitalProductType = json['digital_product_type'];
@@ -245,20 +245,13 @@ class Product {
 
     if(json['images'] != null){
       try{
-        List<String> parsed = json['images'] != null ? json['images'].cast<String>() : [];
-        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
+        _images = json['images'].cast<String>();
       }catch(e){
-        List<String> parsed = json['images'] != null ? jsonDecode(json['images']).cast<String>() : [];
-        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
+        _images = jsonDecode(json['images']).cast<String>();
       }
-
     }
 
-    if (json['thumbnail'] != null && '${json['thumbnail']}'.startsWith('http')) {
-      _thumbnail = '${json['thumbnail']}'.split('/').last;
-    } else {
-      _thumbnail = json['thumbnail'];
-    }
+    _thumbnail = json['thumbnail']?.toString();
     thumbnailFullUrl = json['thumbnail_full_url'] != null ? ImageFullUrl.fromJson(json['thumbnail_full_url']) : null;
     if (json['images_full_url'] != null) {
       imagesFullUrl = [];
@@ -309,16 +302,9 @@ class Product {
         });
       }
     }
-    if(json['unit_price'] != null){
-      _unitPrice = double.tryParse(json['unit_price'].toString());
-    }
-    if(json['purchase_price']!=null){
-      _purchasePrice = double.tryParse(json['purchase_price'].toString());
-    }
-
-    if(json['tax'] != null){
-      _tax = double.tryParse(json['tax'].toString());
-    }
+    _unitPrice = _parseDoubleSafe(json['unit_price']);
+    _purchasePrice = _parseDoubleSafe(json['purchase_price']);
+    _tax = _parseDoubleSafe(json['tax']);
 
     if(json['tax_model'] != null){
       _taxModel = json['tax_model'];
@@ -327,11 +313,9 @@ class Product {
     }
 
     _taxType = json['tax_type'];
-    if(json['discount'] != null ){
-      _discount = double.tryParse(json['discount'].toString());
-    }
+    _discount = _parseDoubleSafe(json['discount']);
     _discountType = json['discount_type'];
-    _currentStock = json['current_stock']??0;
+    _currentStock = _parseIntSafe(json['current_stock']) ?? 0;
     _details = json['details'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
@@ -348,24 +332,14 @@ class Product {
         _rating = [Rating(average: ratingVal)];
       }
     }
-    if(json['shipping_cost']!=null){
-      _shippingCost = double.tryParse(json['shipping_cost'].toString());
-    }
-    if(json['multiply_qty']!=null){
-      _isMultiPly = int.tryParse(json['multiply_qty'].toString());
-    }
-    if(json['reviews_count'] != null){
-      _reviewCount = int.tryParse(json['reviews_count'].toString());
-    } else if(json['review_count'] != null){
-      _reviewCount = int.tryParse(json['review_count'].toString());
-    }
+    _shippingCost = _parseDoubleSafe(json['shipping_cost']);
+    _isMultiPly = _parseIntSafe(json['multiply_qty']);
+    _reviewCount = _parseIntSafe(json['reviews_count']) ?? _parseIntSafe(json['review_count']);
     _videoUrl = json['video_url'];
-    _minimumOrderQty = int.tryParse(json['minimum_order_qty']?.toString() ?? '1') ?? 1;
-    wishList = int.tryParse(json['wish_list_count']?.toString() ?? '0');
+    _minimumOrderQty = _parseIntSafe(json['minimum_order_qty']) ?? 1;
+    wishList = _parseIntSafe(json['wish_list_count']);
     brand = json['brand'] != null ? Brand.fromJson(json['brand']) : null;
     seller = json['seller'] != null ? Seller.fromJson(json['seller']) : null;
-
-
   }
 
 
@@ -485,4 +459,17 @@ class Brand {
     name = json['name'];
   }
 
+}
+/// Safely parses any value (int, double, String, or null) to [int?].
+/// Returns null for null or empty-string inputs; uses [int.tryParse] otherwise.
+int? _parseIntSafe(dynamic value) {
+  if (value == null || value == '') return null;
+  return int.tryParse(value.toString());
+}
+
+/// Safely parses any value (int, double, String, or null) to [double?].
+/// Returns null for null or empty-string inputs; uses [double.tryParse] otherwise.
+double? _parseDoubleSafe(dynamic value) {
+  if (value == null || value == '') return null;
+  return double.tryParse(value.toString());
 }

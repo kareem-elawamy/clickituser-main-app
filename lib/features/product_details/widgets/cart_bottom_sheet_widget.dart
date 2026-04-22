@@ -17,6 +17,7 @@ import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_button_widg
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/show_custom_snakbar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/cart/screens/cart_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class CartBottomSheetWidget extends StatefulWidget {
@@ -140,9 +141,8 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
                               child: ClipRRect(borderRadius: BorderRadius.circular(5),
                                 child: CustomImageWidget(image: (widget.product!.colors != null && widget.product!.colors!.isNotEmpty &&
                                     widget.product!.images != null && widget.product!.images!.isNotEmpty) ?
-                                '${Provider.of<SplashController>(context,listen: false).baseUrls!.productImageUrl}/$colorWiseSelectedImage':
-                                '${Provider.of<SplashController>(context,listen: false).baseUrls!.productThumbnailUrl}/'
-                                    '${widget.product!.thumbnail}'))),
+                                getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.productImageUrl, colorWiseSelectedImage):
+                                getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.productThumbnailUrl, widget.product!.thumbnail)))),
 
                             widget.product!.discount! > 0 ?
                             Container(width: 100,

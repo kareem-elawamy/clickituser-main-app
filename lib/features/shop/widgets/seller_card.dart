@@ -7,6 +7,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shop/screens/shop_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -73,11 +74,7 @@ class _SellerCardState extends State<SellerCard> {
                   borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.paddingSizeSmall),
                       topRight: Radius.circular(Dimensions.paddingSizeSmall)),
                   child: CustomImageWidget(
-                    image: () {
-                      final banner = widget.sellerModel?.shop?.banner;
-                      if (banner != null && banner.startsWith('http')) return banner;
-                      return '${splashController.baseUrls?.shopImageUrl ?? ''}/banner/$banner';
-                    }(),
+                    image: getFullImageUrl(splashController.baseUrls?.shopImageUrl, widget.sellerModel?.shop?.banner),
                   ))),
 
               ConstrainedBox(
@@ -95,11 +92,7 @@ class _SellerCardState extends State<SellerCard> {
                           child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(Dimensions.paddingSizeOverLarge)),
                               child: CustomImageWidget(
-                                  image: () {
-                                    final img = widget.sellerModel?.shop?.image;
-                                    if (img != null && img.startsWith('http')) return img;
-                                    return '${splashController.baseUrls?.shopImageUrl ?? ''}/$img';
-                                  }(),
+                                  image: getFullImageUrl(splashController.baseUrls?.shopImageUrl, widget.sellerModel?.shop?.image),
                                   width: 60, height: 60))),
                       if (widget.sellerModel?.shop?.temporaryClose == true || vacationIsOn)
                         Container(decoration: BoxDecoration(

@@ -11,6 +11,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/widgets/favourite_button_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class JustForYouProductCard extends StatelessWidget {
@@ -44,7 +45,7 @@ class JustForYouProductCard extends StatelessWidget {
                   Theme.of(context).primaryColor.withOpacity(.05) :ColorResources.getIconBg(context),
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),),
                   child: ClipRRect(borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                    child: CustomImageWidget(image: '${splashController.baseUrls!.productThumbnailUrl}/${product.thumbnail}',),),),
+                    child: CustomImageWidget(image: getFullImageUrl(splashController.baseUrls?.productThumbnailUrl, product.thumbnail),),),),
 
 
                 Padding(padding: const EdgeInsets.only(top :Dimensions.paddingSizeSmall,bottom: 5, left: 5,right: 5),

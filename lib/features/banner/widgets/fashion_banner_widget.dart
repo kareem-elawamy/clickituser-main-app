@@ -8,6 +8,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -51,8 +52,7 @@ class FashionBannersWidget extends StatelessWidget {
                             color: Color(int.parse(colorString))),
                             child: Row(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center, children: [
                             SizedBox(width : MediaQuery.of(context).size.width/2.5,height : MediaQuery.of(context).size.width/2.5,
-                              child: CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl}'
-                                  '/${bannerController.mainBannerList![index].photo}'),
+                              child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl, bannerController.mainBannerList![index].photo)),
                             ),
                             Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Column(mainAxisSize: MainAxisSize.min,children: [

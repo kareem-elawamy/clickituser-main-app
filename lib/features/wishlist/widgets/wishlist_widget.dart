@@ -10,6 +10,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/features/wishlist/widgets/remove_from_wishlist_bottom_sheet_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class WishListWidget extends StatelessWidget {
@@ -35,7 +36,7 @@ class WishListWidget extends StatelessWidget {
                 border: Border.all(width: .5, color: Theme.of(context).primaryColor.withOpacity(.25)),),
                 child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                   child: CustomImageWidget(width: 90, height: 90,
-                    image: '${splashController.baseUrls!.productThumbnailUrl}/${wishlistModel?.productFullInfo!.thumbnail}',
+                    image: getFullImageUrl(splashController.baseUrls?.productThumbnailUrl, wishlistModel?.productFullInfo?.thumbnail),
                   ))),
 
 

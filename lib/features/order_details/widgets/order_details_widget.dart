@@ -22,6 +22,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/show_custom_snakbar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/screens/otp_verification_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -73,8 +74,7 @@ class _OrderDetailsWidgetState extends State<OrderDetailsWidget> {
                     ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                       child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                         border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.125))),
-                        child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).
-                        baseUrls!.productThumbnailUrl}/${widget.orderDetailsModel.productDetails?.thumbnail}', width: 80, height: 80))),
+                        child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, widget.orderDetailsModel.productDetails?.thumbnail), width: 80, height: 80))),
                     const SizedBox(width: Dimensions.marginSizeDefault),
 
 

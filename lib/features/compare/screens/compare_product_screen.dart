@@ -14,6 +14,7 @@ import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_wid
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/compare/widgets/remove_compare_list_bottom_sheet_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/compare/widgets/custom_top_sheet_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class CompareProductScreen extends StatefulWidget {
@@ -157,7 +158,7 @@ class CompareCard extends StatelessWidget {
                               color: Provider.of<ThemeController>(context, listen: false).darkTheme? Theme.of(context).hintColor.withOpacity(.5) : ColorResources.getIconBg(context),
                               borderRadius: const BorderRadius.all(Radius.circular(10))),
                             child: ClipRRect(borderRadius: const BorderRadius.all( Radius.circular(Dimensions.paddingSizeSmall)),
-                              child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).baseUrls!.productThumbnailUrl}/${product?.thumbnail}',
+                              child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, product?.thumbnail),
                                   height: 180,width: 200, placeholder: Images.emptyProduct)
 
                             ),

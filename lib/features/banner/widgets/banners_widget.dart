@@ -6,6 +6,7 @@ import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_c
 import 'package:flutter_sixvalley_ecommerce/theme/controllers/theme_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -58,8 +59,7 @@ class BannersWidget extends StatelessWidget {
                                   color: Provider.of<ThemeController>(context, listen: false).darkTheme?
                                   Theme.of(context).primaryColor.withOpacity(.1) :
                                   Theme.of(context).primaryColor.withOpacity(.05)),
-                                    child: CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl}'
-                                    '/${bannerProvider.mainBannerList?[index].photo}')
+                                    child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.bannerImageUrl, bannerProvider.mainBannerList?[index].photo))
                                 ),
                               ),
                             );

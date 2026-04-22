@@ -10,6 +10,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/widgets/favourite_button_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class ProductWidget extends StatelessWidget {
@@ -36,7 +37,7 @@ class ProductWidget extends StatelessWidget {
                 Theme.of(context).primaryColor.withOpacity(.05) : ColorResources.getIconBg(context),
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),),
               child: ClipRRect(borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl ?? ''}/${productModel.thumbnail}',
+                child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, productModel.thumbnail),
                   height: MediaQuery.of(context).size.width/2.45,width: MediaQuery.of(context).size.width, fit: BoxFit.contain,))),
 
             // Product Details

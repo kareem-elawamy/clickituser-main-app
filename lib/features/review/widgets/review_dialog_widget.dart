@@ -17,6 +17,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_textfield_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class ReviewDialog extends StatefulWidget {
@@ -260,8 +261,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                   child: FadeInImage.assetNetwork(
                     placeholder: Images.placeholder, fit: BoxFit.scaleDown, width: 70, height: 70,
-                    image: '${Provider.of<SplashController>(context, listen: false).
-                    baseUrls!.productThumbnailUrl}/${widget.orderDetailsModel.productDetails?.thumbnail}',
+                    image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, widget.orderDetailsModel.productDetails?.thumbnail),
                     imageErrorBuilder: (c, o, s) => Image.asset(Images.placeholder,
                         fit: BoxFit.scaleDown, width: 70, height: 70)))),
               const SizedBox(width: Dimensions.marginSizeDefault),

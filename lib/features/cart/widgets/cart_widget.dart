@@ -12,6 +12,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class CartWidget extends StatelessWidget {
@@ -57,7 +58,7 @@ class CartWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                               border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.10),width: 0.5)),
                               child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                                child: CustomImageWidget(image: '${splashController.baseUrls?.productThumbnailUrl}/${cartModel?.thumbnail}',
+                                child: CustomImageWidget(image: getFullImageUrl(splashController.baseUrls?.productThumbnailUrl, cartModel?.thumbnail),
                                   height: 70, width: 70))),
                       if(cartModel!.isProductAvailable! == 0)
                       Container(decoration: BoxDecoration(

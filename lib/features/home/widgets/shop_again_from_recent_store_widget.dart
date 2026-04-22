@@ -9,6 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shop/domain/models/shop_again_from_recent_store_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shop/screens/shop_screen.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class ShopAgainFromRecentStoreWidget extends StatelessWidget {
@@ -44,8 +45,7 @@ class ShopAgainFromRecentStoreWidget extends StatelessWidget {
                     border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.1), width: 1),
                     borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusDefault))),
                   child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-                    child: CustomImageWidget(image: "${splashController.configModel?.baseUrls?.productThumbnailUrl}/"
-                        "${shopAgainFromRecentStoreModel?.thumbnail}"))),
+                    child: CustomImageWidget(image: getFullImageUrl(splashController.configModel?.baseUrls?.productThumbnailUrl, shopAgainFromRecentStoreModel?.thumbnail)))),
 
                 Text(PriceConverter.convertPrice(context, shopAgainFromRecentStoreModel?.unitPrice),
                     style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge,

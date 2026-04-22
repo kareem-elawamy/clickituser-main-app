@@ -13,6 +13,7 @@ import 'package:flutter_sixvalley_ecommerce/features/deal/widgets/flash_deal_car
 import 'package:flutter_sixvalley_ecommerce/features/home/shimmers/flash_deal_shimmer.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/widgets/favourite_button_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -115,8 +116,7 @@ class FlashDealsListWidget extends StatelessWidget {
                         decoration: BoxDecoration(color: ColorResources.getIconBg(context),
                           borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),
                               bottomLeft: Radius.circular(10))),
-                        child: CustomImageWidget(image: '${Provider.of<SplashController>(context, listen: false).baseUrls!.productThumbnailUrl}'
-                            '/${flashDealController.flashDealList[index].thumbnail}'))),
+                        child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, flashDealController.flashDealList[index].thumbnail)))),
 
                     Expanded(flex: 6,
                       child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),

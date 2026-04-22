@@ -12,6 +12,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/image_diaglog_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class OrderAgainView extends StatelessWidget {
@@ -85,9 +86,9 @@ class OrderAgainCard extends StatelessWidget {
                           itemBuilder: (context, detailsIndex) {
                             return Padding(padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
                               child: InkWell(onTap: (){
-                                  showDialog(context: context, builder: (_) => ImageDialog(imageUrl: '${Provider.of<SplashController>(context,listen: false).configModel?.baseUrls?.productThumbnailUrl}/${orders.details?[detailsIndex].product?.thumbnail??''}'));
+                                  showDialog(context: context, builder: (_) => ImageDialog(imageUrl: getFullImageUrl(Provider.of<SplashController>(context,listen: false).configModel?.baseUrls?.productThumbnailUrl, orders.details?[detailsIndex].product?.thumbnail)));
                                 } ,
-                                child: CustomImageWidget(fit: BoxFit.cover, width: 45, height: 45, image: '${Provider.of<SplashController>(context,listen: false).configModel?.baseUrls?.productThumbnailUrl}/${orders.details?[detailsIndex].product?.thumbnail??''}'),),);}),),
+                                child: CustomImageWidget(fit: BoxFit.cover, width: 45, height: 45, image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).configModel?.baseUrls?.productThumbnailUrl, orders.details?[detailsIndex].product?.thumbnail)),),);}),),
 
                       if(orders.details!.length> 3)
                       Text('+${orders.details!.length-3}\n ${getTranslated('more', context)}', style: textRegular),

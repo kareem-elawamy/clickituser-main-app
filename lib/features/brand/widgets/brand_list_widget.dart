@@ -9,6 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/theme/controllers/theme_controller.d
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class BrandListWidget extends StatelessWidget {
@@ -49,11 +50,7 @@ class BrandListWidget extends StatelessWidget {
                             null :[BoxShadow(color: Colors.grey.withOpacity(0.12), spreadRadius: 1, blurRadius: 1, offset: const Offset(0, 1))]),
                           child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(5)),
                             child: CustomImageWidget(
-                              image: () {
-                                final img = brandProvider.brandList[index].image;
-                                if (img != null && img.startsWith('http')) return img;
-                                return '${Provider.of<SplashController>(context, listen: false).baseUrls?.brandImageUrl ?? ''}/$img';
-                              }(),
+                              image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.brandImageUrl, brandProvider.brandList[index].image),
                             )),
                         ),
                       ],
@@ -88,7 +85,7 @@ class BrandListWidget extends StatelessWidget {
                   Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
                       child: Container(decoration: BoxDecoration(color: Theme.of(context).cardColor, 
                           borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall)),
-                        child: CustomImageWidget(image:'${Provider.of<SplashController>(context,listen: false).baseUrls!.brandImageUrl!}/${brandProvider.brandList[index].image!}'),),)),
+                        child: CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.brandImageUrl, brandProvider.brandList[index].image)),),)),
 
                   SizedBox(height: (MediaQuery.of(context).size.width/4) * 0.3,
                     child: Center(child: Text(brandProvider.brandList[index].name!, maxLines: 1, overflow: TextOverflow.ellipsis,
