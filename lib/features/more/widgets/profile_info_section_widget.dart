@@ -9,6 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/not_logged_in_bottom_sheet_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +50,8 @@ class ProfileInfoSectionWidget extends StatelessWidget {
                           border: Border.all(color: Colors.white, width: 3),
                           shape: BoxShape.circle,),
                           child: Provider.of<AuthController>(context, listen: false).isLoggedIn()?
-                          CustomImageWidget(image: '${Provider.of<SplashController>(context,listen: false).baseUrls!.customerImageUrl}/'
-                              '${profile.userInfoModel?.image}', width: 70,height: 70,fit: BoxFit.cover,placeholder: Images.guestProfile):
+                          CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context,listen: false).baseUrls?.customerImageUrl,
+                              profile.userInfoModel?.image), width: 70,height: 70,fit: BoxFit.cover,placeholder: Images.guestProfile):
                           Image.asset(Images.guestProfile),)),
                   ),
                   const SizedBox(width: Dimensions.paddingSizeDefault),

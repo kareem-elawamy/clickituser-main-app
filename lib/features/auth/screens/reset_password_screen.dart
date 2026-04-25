@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
@@ -56,7 +57,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
       body: Form(key: _formKeyReset,
         child: ListView(padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall), children: [
             Padding(padding: const EdgeInsets.all(50),
-              child: Image.asset(Images.logoWithNameImage, height: 150, width: 200),),
+              child: Image.asset(AppConfig.appLogo, height: 150, width: 200),),
 
             Padding(padding: const EdgeInsets.all(Dimensions.marginSizeLarge),
               child: Text(getTranslated('password_reset', context)!, style: titilliumSemiBold)),

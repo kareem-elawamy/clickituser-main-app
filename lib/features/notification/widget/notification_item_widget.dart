@@ -7,6 +7,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/features/notification/widget/notification_dialog_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class NotificationItemWidget extends StatelessWidget {
                       border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.15), width: .35),
                       borderRadius: BorderRadius.circular(40)),
                       child: CustomImageWidget(width: 50,height: 50,
-                          image: '${splashController.baseUrls!.notificationImageUrl}/${notificationItem.image}'))),
+                          image: getFullImageUrl(splashController.baseUrls?.notificationImageUrl, notificationItem.image)))),
 
 
 

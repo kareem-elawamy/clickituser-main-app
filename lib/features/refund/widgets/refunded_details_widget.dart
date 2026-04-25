@@ -156,7 +156,7 @@ class RefundDetailsWidgetState extends State<RefundDetailsWidget> {
                                             decoration: const BoxDecoration(
                                               color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
                                             child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(Dimensions.paddingSizeExtraSmall)),
-                                              child: CustomImageWidget(placeholder: Images.placeholder, image: '${AppConstants.baseUrl}/storage/app/public/refund/'
+                                              child: CustomImageWidget(image: '${AppConstants.baseUrl}/storage/app/public/refund/'
                                                       '${refund.refundResultModel!.refundRequest![0].images![index]}',
                                                   width: 85, height: 85, fit: BoxFit.cover),) ,
                                           ),

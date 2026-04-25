@@ -10,20 +10,20 @@
 /// Returns an empty string when [imagePath] is null or empty.
 String getFullImageUrl(String? baseUrl, String? imagePath) {
   if (imagePath == null || imagePath.isEmpty) return '';
-
-  // Extract just the filename from the path (works for both full URLs and
-  // relative paths like "image.webp" or "subfolder/image.webp").
-  final String filename = imagePath.contains('/')
-      ? imagePath.split('/').last
-      : imagePath;
-
-  if (filename.isEmpty) return '';
-
-  // If we have an authoritative base URL, always build from it.
-  if (baseUrl != null && baseUrl.isNotEmpty) {
-    return '$baseUrl/$filename';
+  
+  // 1. If the API already returns a full, valid URL, use it directly.
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
   }
-
-  // No base URL available — return the original path as a best-effort.
-  return imagePath;
+  
+  // 2. Otherwise, safely concatenate the base URL and the relative path.
+  final String base = baseUrl?.endsWith('/') == true 
+      ? baseUrl!.substring(0, baseUrl.length - 1) 
+      : baseUrl ?? '';
+      
+  final String path = imagePath.startsWith('/') 
+      ? imagePath.substring(1) 
+      : imagePath;
+  
+  return '$base/$path';
 }

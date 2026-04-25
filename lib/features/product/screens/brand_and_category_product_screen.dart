@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/controllers/product_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
@@ -73,8 +74,9 @@ class _BrandAndCategoryProductScreenState
       appBar: CustomAppBar(title: widget.name),
       body: Consumer<ProductController>(
         builder: (context, productController, child) {
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          return ListView(
+              controller: _scrollController,
+              padding: EdgeInsets.zero,
               children: [
                 widget.isBrand
                     ? Container(
@@ -109,104 +111,118 @@ class _BrandAndCategoryProductScreenState
                 if (!widget.isBrand &&
                     productController.subCategoryList != null &&
                     productController.subCategoryList!.isNotEmpty)
-                  Container(
-                      height: 120,
-                      margin: const EdgeInsets.only(
-                          top: Dimensions.paddingSizeSmall),
-                      padding: const EdgeInsets.only(
-                          left: Dimensions.paddingSizeSmall,
-                          right: Dimensions.paddingSizeSmall),
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: productController.subCategoryList!.length,
-                          itemBuilder: (context, index) {
-                            var subCategory =
-                                productController.subCategoryList![index];
-                            return InkWell(
-                                onTap: () {
-                                  Provider.of<ProductController>(context,
-                                          listen: false)
-                                      .clearBrandOrCategoryProductList();
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              BrandAndCategoryProductScreen(
-                                                isBrand: false,
-                                                id: subCategory.id.toString(),
-                                                name: subCategory.name,
-                                              )));
-                                },
-                                child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: Dimensions.paddingSizeSmall),
-                                    child: Column(children: [
-                                      Container(
-                                          height: 60,
-                                          width: 60,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions
-                                                          .paddingSizeSmall),
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(0.1)),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions
-                                                          .paddingSizeSmall),
-                                              child: CustomImageWidget(
-                                                image: subCategory.icon !=
-                                                            null &&
-                                                        subCategory.icon!
-                                                            .startsWith('http')
-                                                    ? subCategory.icon!
-                                                    : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/${subCategory.icon}',
-                                                fit: BoxFit.cover,
-                                              ))),
-                                      const SizedBox(
-                                          height:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      SizedBox(
-                                          width: 60,
-                                          child: Text(
-                                            subCategory.name ?? '',
-                                            textAlign: TextAlign.center,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: textRegular.copyWith(
-                                                fontSize:
-                                                    Dimensions.fontSizeSmall),
-                                          ))
-                                    ])));
-                          })),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                    itemCount: productController.subCategoryList!.length,
+                    itemBuilder: (context, index) {
+                      var subCategory = productController.subCategoryList![index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 15,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                          child: ExpansionTile(
+                            title: Text(subCategory.name ?? '', style: textBold.copyWith(fontSize: 16)),
+                            trailing: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).hintColor),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                                child: (subCategory.subSubCategories != null && subCategory.subSubCategories!.isNotEmpty)
+                                    ? Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Wrap(
+                                          spacing: 10,
+                                          runSpacing: 10,
+                                          children: subCategory.subSubCategories!.map((subSub) {
+                                            return InkWell(
+                                              onTap: () {
+                                                Provider.of<ProductController>(context, listen: false).clearBrandOrCategoryProductList();
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) => BrandAndCategoryProductScreen(
+                                                              isBrand: false,
+                                                              id: subSub.id.toString(),
+                                                              name: subSub.name,
+                                                            )));
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context).primaryColor.withOpacity(0.08),
+                                                  borderRadius: BorderRadius.circular(24),
+                                                ),
+                                                child: Text(subSub.name ?? '', style: textRegular.copyWith(fontSize: 13, color: Theme.of(context).primaryColor)),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      )
+                                    : Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Provider.of<ProductController>(context, listen: false).clearBrandOrCategoryProductList();
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => BrandAndCategoryProductScreen(
+                                                          isBrand: false,
+                                                          id: subCategory.id.toString(),
+                                                          name: subCategory.name,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).primaryColor.withOpacity(0.08),
+                                              borderRadius: BorderRadius.circular(24),
+                                            ),
+                                            child: Text(getTranslated('view_all', context) ?? 'View All', style: textRegular.copyWith(fontSize: 13, color: Theme.of(context).primaryColor)),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
 
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
                 // Products
                 productController.brandOrCategoryProductList.isNotEmpty
-                    ? Expanded(
-                        child: MasonryGridView.count(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.paddingSizeSmall),
-                          physics: const BouncingScrollPhysics(),
-                          crossAxisCount:
-                              MediaQuery.of(context).size.width > 480 ? 3 : 2,
-                          itemCount: productController
-                              .brandOrCategoryProductList.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ProductWidget(
-                                productModel: productController
-                                    .brandOrCategoryProductList[index]);
-                          },
-                        ),
+                    ? MasonryGridView.count(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.paddingSizeSmall),
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount:
+                            MediaQuery.of(context).size.width > 480 ? 3 : 2,
+                        itemCount: productController
+                            .brandOrCategoryProductList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ProductWidget(
+                              productModel: productController
+                                  .brandOrCategoryProductList[index]);
+                        },
                       )
-                    : Expanded(
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5,
                         child: (productController.hasData ?? true)
                             ? ProductShimmer(
                                 isHomePage: false,
@@ -218,7 +234,8 @@ class _BrandAndCategoryProductScreenState
                                 isNoInternet: false,
                                 icon: Images.noProduct,
                                 message: 'no_product_found',
-                              )),
+                              ),
+                      ),
 
                 productController.isBrandOrCategoryProductLoading && offset > 1
                     ? Center(

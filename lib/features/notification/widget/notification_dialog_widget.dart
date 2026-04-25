@@ -4,6 +4,7 @@ import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_c
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class NotificationDialogWidget extends StatelessWidget {
@@ -27,7 +28,7 @@ class NotificationDialogWidget extends StatelessWidget {
           Container(height: MediaQuery.of(context).size.width-130, width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
             decoration: BoxDecoration( color: Theme.of(context).primaryColor.withOpacity(0.20)),
-            child: CustomImageWidget(image: '${splashController.baseUrls!.notificationImageUrl}/${notificationModel.image}',
+            child: CustomImageWidget(image: getFullImageUrl(splashController.baseUrls?.notificationImageUrl, notificationModel.image),
               height: MediaQuery.of(context).size.width-130, width: MediaQuery.of(context).size.width)):
           const SizedBox(),
           const SizedBox(height: Dimensions.paddingSizeLarge),

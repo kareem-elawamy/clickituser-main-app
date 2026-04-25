@@ -3,6 +3,9 @@ import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/exception/api
 import 'package:flutter_sixvalley_ecommerce/data/model/api_response.dart';
 import 'package:flutter_sixvalley_ecommerce/features/category/domain/repositories/category_repo_interface.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
+import 'package:flutter_sixvalley_ecommerce/main.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 
 class CategoryRepository implements CategoryRepoInterface {
   final DioClient? dioClient;
@@ -31,7 +34,8 @@ class CategoryRepository implements CategoryRepoInterface {
 
   Future<ApiResponse> getCategoryChildes(String id) async {
     try {
-      final response = await dioClient!.get('${AppConstants.categoryChildesUri}$id');
+      final String guestId = Provider.of<AuthController>(Get.context!, listen: false).getGuestToken() ?? '1';
+      final response = await dioClient!.get('${AppConstants.categoryChildesUri}$id?guest_id=$guestId');
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.getMessage(e));

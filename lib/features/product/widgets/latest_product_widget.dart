@@ -9,6 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/rating_bar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product_details/screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
@@ -40,11 +41,7 @@ class LatestProductWidget extends StatelessWidget {
                 child: ClipRRect(borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.paddingSizeSmall),
                       topRight: Radius.circular(10)),
                   child: CustomImageWidget(
-                    image: () {
-                      final thumb = productModel.thumbnail;
-                      if (thumb != null && thumb.startsWith('http')) return thumb;
-                      return '${splashController.baseUrls?.productThumbnailUrl ?? ''}/$thumb';
-                    }(),
+                    image: getFullImageUrl(splashController.baseUrls?.productThumbnailUrl, productModel.thumbnail),
                   )
                 ))),
 

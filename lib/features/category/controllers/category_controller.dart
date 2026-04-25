@@ -65,7 +65,13 @@ class CategoryController extends ChangeNotifier {
     ApiResponse apiResponse = await categoryServiceInterface!.getCategoryChildes(id);
     if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
       _subCategoryList = [];
-      apiResponse.response!.data.forEach((subCategory) => _subCategoryList!.add(SubCategory.fromJson(subCategory)));
+      if (apiResponse.response!.data != null && apiResponse.response!.data is List) {
+        for (var element in apiResponse.response!.data) {
+          if (element is Map<String, dynamic>) {
+            _subCategoryList!.add(SubCategory.fromJson(element));
+          }
+        }
+      }
     } else {
       ApiChecker.checkApi(apiResponse);
     }

@@ -57,8 +57,8 @@ class ShopAgainFromRecentStoreWidget extends StatelessWidget {
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row( mainAxisSize: MainAxisSize.min, children: [
               Container(width: 30, height: 30, decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: CustomImageWidget(image: "${splashController.configModel?.baseUrls?.shopImageUrl}/"
-                    "${shopAgainFromRecentStoreModel?.seller?.shop?.image}",),),
+                child: CustomImageWidget(image: getFullImageUrl(splashController.configModel?.baseUrls?.shopImageUrl,
+                    shopAgainFromRecentStoreModel?.seller?.shop?.image),),),
               const SizedBox(width: Dimensions.paddingSizeSmall),
 
               Expanded(child: Text('${shopAgainFromRecentStoreModel?.seller?.shop?.name}',

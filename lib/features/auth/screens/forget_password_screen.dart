@@ -5,6 +5,7 @@ import 'package:flutter_sixvalley_ecommerce/helper/velidate_check.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
@@ -49,7 +50,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             builder: (context, splashProvider, _) {
               return ListView(padding: const EdgeInsets.all(Dimensions.paddingSizeDefault), children: [
                 Center(child: Padding(padding: const EdgeInsets.all(50),
-                    child: Image.asset(Images.logoWithNameImage, height: 150, width: 150))),
+                    child: Image.asset(AppConfig.appLogo, height: 150, width: 150))),
                 Text(getTranslated('forget_password', context)!, style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
 
 

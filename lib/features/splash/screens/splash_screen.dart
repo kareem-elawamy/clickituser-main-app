@@ -164,7 +164,7 @@ class SplashScreenState extends State<SplashScreen> {
                     pause: 0.25,
                     child: SizedBox(
                         width: 150,
-                        child: Image.asset(Images.icon, width: 250.0))),
+                        child: Image.asset(AppConfig.appLogo, width: 250.0))),
                 const SizedBox(height: 24),
                 const CircularProgressIndicator(),
               ]),

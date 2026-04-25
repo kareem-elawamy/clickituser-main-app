@@ -12,6 +12,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/not_logged_in_bottom_sheet_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/rating_bar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/chat/screens/chat_screen.dart';
@@ -52,7 +53,7 @@ class _ShopInfoWidgetState extends State<ShopInfoWidget> {
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(sellerIconSize),
                       border: Border.all(width: .5,color: Theme.of(context).hintColor)),
                     child: ClipRRect(borderRadius: BorderRadius.circular(sellerIconSize),
-                      child: CustomImageWidget(image: seller.sellerInfoModel?.seller != null? '${splashController.baseUrls?.shopImageUrl}/${seller.sellerInfoModel?.seller?.shop?.image}':
+                      child: CustomImageWidget(image: seller.sellerInfoModel?.seller != null? getFullImageUrl(splashController.baseUrls?.shopImageUrl, seller.sellerInfoModel?.seller?.shop?.image):
                       "${Provider.of<SplashController>(context, listen: false).configModel?.companyIcon}"))),
                   const SizedBox(width: Dimensions.paddingSizeSmall,),
 

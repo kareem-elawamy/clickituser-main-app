@@ -6,6 +6,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 class CategoryWidget extends StatelessWidget {
   final CategoryModel category;
@@ -28,9 +29,7 @@ class CategoryWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
             color: Theme.of(context).primaryColor.withOpacity(.125)),
           child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-            child: CustomImageWidget(image: category.icon != null && category.icon!.startsWith('http') 
-                          ? category.icon! 
-                          : '${baseController.baseUrls?.categoryImageUrl}/${category.icon}'))),
+            child: CustomImageWidget(image: getFullImageUrl(baseController.baseUrls?.categoryImageUrl, category.icon)))),
 
         const SizedBox(height: Dimensions.paddingSizeExtraSmall),
         Center(child: SizedBox(width: MediaQuery.of(context).size.width/6.5,

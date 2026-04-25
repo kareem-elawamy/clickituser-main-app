@@ -113,13 +113,13 @@ class _ReviewDialogState extends State<ReviewDialog> {
                                   scrollDirection: Axis.horizontal,
                                   itemCount : reviewController.orderWiseReview?.attachment?.length ,
                                   itemBuilder: (BuildContext context, index){
-                                    log("--img--> ${Provider.of<SplashController>(context, listen: false).baseUrls?.reviewImageUrl}/${reviewController.orderWiseReview?.attachment?[index]}");
+                                    // Review image URL constructed via helper
                                     return Stack(children: [
                                       Padding(padding: const EdgeInsets.only(right : Dimensions.paddingSizeSmall),
                                           child: Container(decoration: const BoxDecoration(color: Colors.white,
                                             borderRadius: BorderRadius.all(Radius.circular(20)),),
                                               child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(Dimensions.paddingSizeExtraSmall)),
-                                                  child:  CustomImageWidget(image: "${Provider.of<SplashController>(context, listen: false).baseUrls?.reviewImageUrl}/review/${reviewController.orderWiseReview?.attachment?[index]}",)))),
+                                                  child:  CustomImageWidget(image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.reviewImageUrl, reviewController.orderWiseReview?.attachment?[index]),)))),
 
 
                                       Positioned(top:0,right: 0,
@@ -148,8 +148,9 @@ class _ReviewDialogState extends State<ReviewDialog> {
                                     radius: const Radius.circular(Dimensions.paddingSizeSmall),
                                     child: Stack(children: [
                                       ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-                                        child:  SizedBox(height: 75,
-                                          width: 75, child: Image.asset(Images.placeholder, fit: BoxFit.cover))),
+                                        child:  Container(height: 75, width: 75,
+                                          color: Theme.of(context).hintColor.withOpacity(0.1),
+                                          child: Icon(Icons.camera_alt, color: Theme.of(context).hintColor))),
                                       Positioned(bottom: 0, right: 0, top: 0, left: 0,
                                         child: Container(decoration: BoxDecoration(color: Theme.of(context).hintColor.withOpacity(0.07),
                                             borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall)))),
@@ -259,11 +260,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 border: Border.all(width: 1, color: Theme.of(context).primaryColor.withOpacity(.125)),),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: Images.placeholder, fit: BoxFit.scaleDown, width: 70, height: 70,
-                    image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, widget.orderDetailsModel.productDetails?.thumbnail),
-                    imageErrorBuilder: (c, o, s) => Image.asset(Images.placeholder,
-                        fit: BoxFit.scaleDown, width: 70, height: 70)))),
+                  child: CustomImageWidget(
+                    width: 70, height: 70,
+                    image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.productThumbnailUrl, widget.orderDetailsModel.productDetails?.thumbnail)))),
               const SizedBox(width: Dimensions.marginSizeDefault),
 
 

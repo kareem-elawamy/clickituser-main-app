@@ -279,10 +279,10 @@ class _HeaderSection extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(12),
           child: Image.asset(
-            Images.logoImage,
+            AppConfig.appLogo,
             fit: BoxFit.contain,
             errorBuilder: (_, __, ___) => Image.asset(
-              Images.icon,
+              AppConfig.appLogo,
               fit: BoxFit.contain,
             ),
           ),

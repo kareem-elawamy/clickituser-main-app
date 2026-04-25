@@ -243,7 +243,9 @@ class Product {
       _digitalFileReady = json['digital_file_ready'];
     }
 
-    if(json['images'] != null){
+    if (json['images_full_url'] != null && json['images_full_url'] is List) {
+      _images = (json['images_full_url'] as List).map((v) => v['path'].toString()).toList();
+    } else if(json['images'] != null){
       try{
         _images = json['images'].cast<String>();
       }catch(e){
@@ -251,7 +253,7 @@ class Product {
       }
     }
 
-    _thumbnail = json['thumbnail']?.toString();
+    _thumbnail = json['thumbnail_full_url'] != null ? json['thumbnail_full_url']['path'] : json['thumbnail']?.toString();
     thumbnailFullUrl = json['thumbnail_full_url'] != null ? ImageFullUrl.fromJson(json['thumbnail_full_url']) : null;
     if (json['images_full_url'] != null) {
       imagesFullUrl = [];

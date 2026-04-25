@@ -144,10 +144,8 @@ class _OrderDetailsWidgetState extends State<OrderDetailsWidget> {
                                          if(Provider.of<AuthController>(context, listen: false).isLoggedIn() && widget.isGuest == 0){
 
                                            _launchUrl(Uri.parse(widget.orderDetailsModel.productDetails!.digitalProductType == 'ready_after_sell'?
-                                           '${Provider.of<SplashController>(Get.context!, listen: false).
-                                           baseUrls!.digitalProductUrl}/${widget.orderDetailsModel.digitalFileAfterSell}':
-                                           '${Provider.of<SplashController>(Get.context!, listen: false).
-                                           baseUrls!.digitalProductUrl}/${widget.orderDetailsModel.product?.digitalFileReady}'));
+                                           getFullImageUrl(Provider.of<SplashController>(Get.context!, listen: false).baseUrls?.digitalProductUrl, widget.orderDetailsModel.digitalFileAfterSell):
+                                           getFullImageUrl(Provider.of<SplashController>(Get.context!, listen: false).baseUrls?.digitalProductUrl, widget.orderDetailsModel.product?.digitalFileReady)));
 
                                          }else{
                                            orderProvider.downloadDigitalProduct(orderDetailsId: widget.orderDetailsModel.id!).then((value){

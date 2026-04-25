@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/order/domain/models/order_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/order_details/screens/order_details_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 
@@ -42,9 +44,8 @@ class OrderWidget extends StatelessWidget {
 
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                        child: CustomImageWidget(
-                          placeholder: Images.placeholder, fit: BoxFit.scaleDown, width: 70, height: 70,
-                          image: '${Provider.of<SplashController>(context, listen: false).configModel?.baseUrls?.shopImageUrl}/${orderModel?.seller?.shop?.image}',
+                        child: CustomImageWidget(fit: BoxFit.scaleDown, width: 70, height: 70,
+                          image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).configModel?.baseUrls?.shopImageUrl, orderModel?.seller?.shop?.image),
                           )),),]),),
                 const SizedBox(width: Dimensions.paddingSizeLarge),
 

@@ -7,7 +7,9 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/image_diaglog_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/rating_bar_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -21,15 +23,11 @@ class ReviewWidget extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           ClipRRect(borderRadius: BorderRadius.circular(20),
-            child: FadeInImage.assetNetwork(placeholder: Images.placeholder, height: Dimensions.chooseReviewImageSize,
+            child: CustomImageWidget(height: Dimensions.chooseReviewImageSize,
               width: Dimensions.chooseReviewImageSize, fit: BoxFit.cover,
-              image: '${Provider.of<SplashController>(context, listen: false).baseUrls!.customerImageUrl}/${
-                  reviewModel.customer != null ? reviewModel.customer!.image : ''
-              }',
-              imageErrorBuilder: (c, o, s) => Image.asset(Images.placeholder, height: Dimensions.chooseReviewImageSize,
-                  width: Dimensions.chooseReviewImageSize, fit: BoxFit.cover))),
+              image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.customerImageUrl,
+                  reviewModel.customer != null ? reviewModel.customer!.image : ''))),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
 
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
@@ -64,19 +62,16 @@ class ReviewWidget extends StatelessWidget {
               return GestureDetector(
                 onTap: (){
                   showDialog(context: context, builder: (_)=> ImageDialog(
-                      imageUrl: '${Provider.of<SplashController>(context, listen: false).baseUrls!.reviewImageUrl}/review/${reviewModel.attachment![index]}'));
+                      imageUrl: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.reviewImageUrl, reviewModel.attachment![index])));
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: Images.placeholder, height: Dimensions.chooseReviewImageSize,
+                    child: CustomImageWidget(
+                      height: Dimensions.chooseReviewImageSize,
                       width: Dimensions.chooseReviewImageSize, fit: BoxFit.cover,
-                      image: '${Provider.of<SplashController>(context, listen: false).baseUrls!.reviewImageUrl}/review/${reviewModel.attachment![index]}',
-                      imageErrorBuilder: (c, o, s) => Image.asset(Images.placeholder,
-                          height: Dimensions.chooseReviewImageSize,
-                          width: Dimensions.chooseReviewImageSize, fit: BoxFit.cover)))));})) :
+                      image: getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.reviewImageUrl, reviewModel.attachment![index])))));})) :
         const SizedBox(),
       ]),
     );

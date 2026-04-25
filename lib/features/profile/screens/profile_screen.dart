@@ -12,6 +12,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_textfield_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/profile/widgets/delete_account_bottom_sheet_widget.dart';
@@ -180,7 +181,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                         child: Stack(clipBehavior: Clip.none, children: [
                             ClipRRect(borderRadius: BorderRadius.circular(50),
                               child: file == null ?
-                              CustomImageWidget(image: "${splashController.baseUrls!.customerImageUrl}/${profile.userInfoModel!.image}",
+                              CustomImageWidget(image: getFullImageUrl(splashController.baseUrls?.customerImageUrl, profile.userInfoModel!.image),
                                 height: Dimensions.profileImageSize, fit: BoxFit.cover,width: Dimensions.profileImageSize,) :
                               Image.file(file!, width: Dimensions.profileImageSize,
                                   height: Dimensions.profileImageSize, fit: BoxFit.fill),),

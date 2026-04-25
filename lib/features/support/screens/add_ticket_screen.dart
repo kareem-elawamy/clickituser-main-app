@@ -108,7 +108,10 @@ class AddTicketScreenState extends State<AddTicketScreen> {
                       child: Stack(children: [
                         ClipRRect(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
                           child:  SizedBox(height: MediaQuery.of(context).size.width/4.3,
-                            width: MediaQuery.of(context).size.width, child: Image.asset(Images.placeholder))),
+                            width: MediaQuery.of(context).size.width, 
+                            child: Container(
+                              color: Theme.of(context).hintColor.withOpacity(0.1),
+                              child: Icon(Icons.camera_alt, color: Theme.of(context).hintColor, size: 40)))),
                         Positioned(bottom: 0, right: 0, top: 0, left: 0,
                           child: Container(decoration: BoxDecoration(color: Theme.of(context).hintColor.withOpacity(0.07),
                               borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall))))]))) :

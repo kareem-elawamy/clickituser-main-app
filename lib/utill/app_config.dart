@@ -14,4 +14,6 @@ class AppConfig {
   }
 
   static bool get useGateway => currentBrand != 'umart';
+
+  static String get appLogo => 'assets/images/logo/${currentBrand.toLowerCase()}_logo.png';
 }

@@ -11,6 +11,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/image_url_helper.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -193,7 +194,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                                               .startsWith(
                                                                   'http')
                                                       ? subCategory.icon!
-                                                      : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/${subCategory.icon}',
+                                                      : getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.categoryImageUrl, subCategory.icon),
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -357,7 +358,7 @@ class CategoryItem extends StatelessWidget {
                       fit: BoxFit.cover,
                       image: icon != null && icon!.startsWith('http')
                           ? icon!
-                          : '${Provider.of<SplashController>(context, listen: false).baseUrls!.categoryImageUrl}/$icon'))),
+                          : getFullImageUrl(Provider.of<SplashController>(context, listen: false).baseUrls?.categoryImageUrl, icon)))),
           Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: Dimensions.paddingSizeExtraSmall),
