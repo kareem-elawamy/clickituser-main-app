@@ -1,4 +1,4 @@
-class AppConfig {
+class BrandConfig {
   static const String currentBrand = String.fromEnvironment('BRAND', defaultValue: 'velvey');
   
   static String get appName {

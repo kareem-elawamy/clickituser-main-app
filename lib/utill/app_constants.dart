@@ -1,8 +1,10 @@
 import 'package:flutter_sixvalley_ecommerce/localization/models/language_model.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
+
 class AppConstants {
-  static const String appName = 'Click It';
+  static String get appName => BrandConfig.appName;
   static const String slogan = 'Select and Shop';
   static const String appVersion = '14.4';
   /// Base URL is intentionally empty at startup.

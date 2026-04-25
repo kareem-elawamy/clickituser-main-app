@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/main.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
             showLogo?
             Padding(padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
-              child: SizedBox(child: Image.asset(AppConfig.appLogo, height: 35, width: 100))): const SizedBox())
+              child: SizedBox(child: Image.asset(BrandConfig.appLogo, height: 35, width: 100))): const SizedBox())
 
     );
   }

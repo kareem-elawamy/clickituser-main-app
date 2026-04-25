@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/screens/splash_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/controllers/localization_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/push_notification/models/notification_body.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/gateway_service.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
@@ -191,7 +191,7 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen>
                     opacity: _fadeIn,
                     child: SlideTransition(
                       position: _slideUp,
-                      child: _HeaderSection(appName: AppConfig.appName),
+                      child: _HeaderSection(appName: BrandConfig.appName),
                     ),
                   ),
 
@@ -227,7 +227,7 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen>
                   SizedBox(height: screenH * 0.04),
 
                   // ── Flavor badge (debug helper — visible only in debug) ─
-                  _FlavorBadge(brand: AppConfig.currentBrand),
+                  _FlavorBadge(brand: BrandConfig.currentBrand),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -279,17 +279,17 @@ class _HeaderSection extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(12),
           child: Image.asset(
-            AppConfig.appLogo,
+            BrandConfig.appLogo,
             fit: BoxFit.contain,
             errorBuilder: (_, __, ___) => Image.asset(
-              AppConfig.appLogo,
+              BrandConfig.appLogo,
               fit: BoxFit.contain,
             ),
           ),
         ),
         const SizedBox(height: 18),
 
-        // App Name  — dynamic from AppConfig
+        // App Name  — dynamic from BrandConfig
         Text(
           appName,
           style: const TextStyle(

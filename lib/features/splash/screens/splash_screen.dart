@@ -9,7 +9,7 @@ import 'package:flutter_sixvalley_ecommerce/main.dart';
 import 'package:flutter_sixvalley_ecommerce/push_notification/models/notification_body.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
@@ -120,7 +120,7 @@ class SplashScreenState extends State<SplashScreen> {
                       const DashBoardScreen()));
             }
           } else if (Provider.of<SplashController>(Get.context!, listen: false)
-              .showIntro()! && AppConfig.useGateway) {
+              .showIntro()! && BrandConfig.useGateway) {
             Navigator.of(Get.context!).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => OnBoardingScreen(
                     indicatorColor: ColorResources.grey,
@@ -164,7 +164,7 @@ class SplashScreenState extends State<SplashScreen> {
                     pause: 0.25,
                     child: SizedBox(
                         width: 150,
-                        child: Image.asset(AppConfig.appLogo, width: 250.0))),
+                        child: Image.asset(BrandConfig.appLogo, width: 250.0))),
                 const SizedBox(height: 24),
                 const CircularProgressIndicator(),
               ]),

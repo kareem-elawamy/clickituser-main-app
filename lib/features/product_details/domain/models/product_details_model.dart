@@ -57,62 +57,61 @@ class ProductDetailsModel {
   Seller? _seller;
   int? wishList;
 
-
-  ProductDetailsModel(
-      {int? id,
-        String? addedBy,
-        int? userId,
-        String? name,
-        String? slug,
-        String? productType,
-        List<CategoryIds>? categoryIds,
-        int? brandId,
-        String? unit,
-        int? minQty,
-        int? refundable,
-        String? digitalProductType,
-        String? digitalFileReady,
-        List<String>? images,
-        List<ColorImage>? colorImage,
-        String? thumbnail,
-        int? featured,
-        String? videoProvider,
-        String? videoUrl,
-        List<Colors>? colors,
-        int? variantProduct,
-        List<int>? attributes,
-        List<ChoiceOptions>? choiceOptions,
-        List<Variation>? variation,
-        int? published,
-        double? unitPrice,
-        double? purchasePrice,
-        double? tax,
-        String? taxModel,
-        String? taxType,
-        double? discount,
-        String? discountType,
-        int? currentStock,
-        int? minimumOrderQty,
-        String? details,
-        int? freeShipping,
-        String? createdAt,
-        String? updatedAt,
-        int? status,
-        int? featuredStatus,
-        String? metaTitle,
-        String? metaDescription,
-        String? metaImage,
-        int? requestStatus,
-        String? deniedNote,
-        double? shippingCost,
-        int? multiplyQty,
-        String? code,
-        int? reviewsCount,
-        String? averageReview,
-        List<Reviews>? reviews,
-        Seller? seller,
-        int? wishList,
-      }) {
+  ProductDetailsModel({
+    int? id,
+    String? addedBy,
+    int? userId,
+    String? name,
+    String? slug,
+    String? productType,
+    List<CategoryIds>? categoryIds,
+    int? brandId,
+    String? unit,
+    int? minQty,
+    int? refundable,
+    String? digitalProductType,
+    String? digitalFileReady,
+    List<String>? images,
+    List<ColorImage>? colorImage,
+    String? thumbnail,
+    int? featured,
+    String? videoProvider,
+    String? videoUrl,
+    List<Colors>? colors,
+    int? variantProduct,
+    List<int>? attributes,
+    List<ChoiceOptions>? choiceOptions,
+    List<Variation>? variation,
+    int? published,
+    double? unitPrice,
+    double? purchasePrice,
+    double? tax,
+    String? taxModel,
+    String? taxType,
+    double? discount,
+    String? discountType,
+    int? currentStock,
+    int? minimumOrderQty,
+    String? details,
+    int? freeShipping,
+    String? createdAt,
+    String? updatedAt,
+    int? status,
+    int? featuredStatus,
+    String? metaTitle,
+    String? metaDescription,
+    String? metaImage,
+    int? requestStatus,
+    String? deniedNote,
+    double? shippingCost,
+    int? multiplyQty,
+    String? code,
+    int? reviewsCount,
+    String? averageReview,
+    List<Reviews>? reviews,
+    Seller? seller,
+    int? wishList,
+  }) {
     if (id != null) {
       _id = id;
     }
@@ -272,7 +271,6 @@ class ProductDetailsModel {
       _seller = seller;
     }
     this.wishList;
-
   }
 
   int? get id => _id;
@@ -350,11 +348,13 @@ class ProductDetailsModel {
     if (json['images'] != null) {
       try {
         List<String> parsed = json['images'].cast<String>();
-        _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
+        // Store the URL as-is. If it's already absolute, use it directly.
+        // getFullImageUrl() handles both absolute and relative paths correctly.
+        _images = parsed;
       } catch (e) {
         try {
           List<String> parsed = jsonDecode(json['images']).cast<String>();
-          _images = parsed.map((img) => img.startsWith('http') ? img.split('/').last : img).toList();
+          _images = parsed;
         } catch (e) {
           _images = [];
         }
@@ -374,11 +374,9 @@ class ProductDetailsModel {
         });
       }
     }
-    if (json['thumbnail'] != null && '${json['thumbnail']}'.startsWith('http')) {
-      _thumbnail = '${json['thumbnail']}'.split('/').last;
-    } else {
-      _thumbnail = json['thumbnail'];
-    }
+    // Store the full URL as-is. getFullImageUrl() will pass it through unchanged
+    // when it already starts with http:// or https://.
+    _thumbnail = json['thumbnail']?.toString();
     _featured = json['featured'];
     _videoProvider = json['video_provider'];
     _videoUrl = json['video_url'];
@@ -434,16 +432,17 @@ class ProductDetailsModel {
     }
     _published = json['published'];
     _unitPrice = double.tryParse(json['unit_price']?.toString() ?? '0') ?? 0.0;
-    _purchasePrice = double.tryParse(json['purchase_price']?.toString() ?? '0') ?? 0.0;
+    _purchasePrice =
+        double.tryParse(json['purchase_price']?.toString() ?? '0') ?? 0.0;
     _tax = double.tryParse(json['tax']?.toString() ?? '0') ?? 0.0;
     _taxModel = json['tax_model'];
     _taxType = json['tax_type'];
     _discount = double.tryParse(json['discount']?.toString() ?? '0') ?? 0.0;
     _discountType = json['discount_type'];
     _currentStock = json['current_stock'];
-    if(json['minimum_order_qty'] != null){
+    if (json['minimum_order_qty'] != null) {
       _minimumOrderQty = int.parse(json['minimum_order_qty'].toString());
-    }else{
+    } else {
       _minimumOrderQty = 1;
     }
 
@@ -462,12 +461,13 @@ class ProductDetailsModel {
       _requestStatus = 0;
     }
     _deniedNote = json['denied_note'];
-    _shippingCost = double.tryParse(json['shipping_cost']?.toString() ?? '0') ?? 0.0;
+    _shippingCost =
+        double.tryParse(json['shipping_cost']?.toString() ?? '0') ?? 0.0;
     _multiplyQty = json['multiply_qty'];
     _code = json['code'];
-    if(json['reviews_count'] != null){
+    if (json['reviews_count'] != null) {
       _reviewsCount = int.parse(json['reviews_count'].toString());
-    }else{
+    } else {
       _reviewsCount = 0;
     }
 
@@ -479,16 +479,14 @@ class ProductDetailsModel {
       });
     }
     _seller = json['seller'] != null ? Seller.fromJson(json['seller']) : null;
-    if(json['wish_list_count'] != null){
-      try{
+    if (json['wish_list_count'] != null) {
+      try {
         wishList = json['wish_list_count'];
-      }catch(e){
+      } catch (e) {
         wishList = int.parse(json['wish_list_count'].toString());
       }
-
     }
   }
-
 }
 
 class CategoryIds {
@@ -506,7 +504,6 @@ class CategoryIds {
 
   String? get id => _id;
   int? get position => _position;
-
 
   CategoryIds.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -537,7 +534,6 @@ class Colors {
   String? get name => _name;
   String? get code => _code;
 
-
   Colors.fromJson(Map<String, dynamic> json) {
     _name = json['name'];
     _code = json['code'];
@@ -550,8 +546,6 @@ class Colors {
     return data;
   }
 }
-
-
 
 class Reviews {
   int? _id;
@@ -567,15 +561,15 @@ class Reviews {
 
   Reviews(
       {int? id,
-        int? productId,
-        int? customerId,
-        String? comment,
-        String? attachment,
-        int? rating,
-        int? status,
-        String? createdAt,
-        String? updatedAt,
-        Customer? customer}) {
+      int? productId,
+      int? customerId,
+      String? comment,
+      String? attachment,
+      int? rating,
+      int? status,
+      String? createdAt,
+      String? updatedAt,
+      Customer? customer}) {
     if (id != null) {
       _id = id;
     }
@@ -619,20 +613,22 @@ class Reviews {
   String? get updatedAt => _updatedAt;
   Customer? get customer => _customer;
 
-
   Reviews.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
-    _productId = json['product_id'] != null ? int.tryParse(json['product_id'].toString()) : 0;
-    _customerId = json['customer_id'] != null ? int.tryParse(json['customer_id'].toString()) : 0;
+    _productId = json['product_id'] != null
+        ? int.tryParse(json['product_id'].toString())
+        : 0;
+    _customerId = json['customer_id'] != null
+        ? int.tryParse(json['customer_id'].toString())
+        : 0;
     _comment = json['comment'];
     _attachment = json['attachment'];
     _rating = json['rating'];
     _status = json['status'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
-    _customer = json['customer'] != null
-        ? Customer.fromJson(json['customer'])
-        : null;
+    _customer =
+        json['customer'] != null ? Customer.fromJson(json['customer']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -661,14 +657,14 @@ class Customer {
   String? _image;
   String? _email;
 
-  Customer(
-      {int? id,
-        String? fName,
-        String? lName,
-        String? phone,
-        String? image,
-        String? email,
-      }) {
+  Customer({
+    int? id,
+    String? fName,
+    String? lName,
+    String? phone,
+    String? image,
+    String? email,
+  }) {
     if (id != null) {
       _id = id;
     }
@@ -687,7 +683,6 @@ class Customer {
     if (email != null) {
       _email = email;
     }
-
   }
 
   int? get id => _id;
@@ -697,7 +692,6 @@ class Customer {
   String? get image => _image;
   String? get email => _email;
 
-
   Customer.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _fName = json['f_name'];
@@ -705,7 +699,6 @@ class Customer {
     _phone = json['phone'];
     _image = json['image'];
     _email = json['email'];
-
   }
 
   Map<String, dynamic> toJson() {
@@ -720,7 +713,6 @@ class Customer {
     return data;
   }
 }
-
 
 class ColorImage {
   String? color;
@@ -739,5 +731,4 @@ class ColorImage {
     color = json['color'];
     imageName = json['image_name'];
   }
-
 }

@@ -5,7 +5,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/features/dashboard/widgets/app_exit_card_widget.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/widgets/sign_in_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/widgets/sign_up_widget.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +50,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                     Image.asset(Images.loginBg,fit: BoxFit.cover,height: 200, opacity : const AlwaysStoppedAnimation(.15)),
                     Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .05),
                       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Image.asset(AppConfig.appLogo, width: 130, height: 100)]))]),
+                        Image.asset(BrandConfig.appLogo, width: 130, height: 100)]))]),
 
                   AnimatedContainer(transform: Matrix4.translationValues(0, -20, 0),
                     curve: Curves.fastOutSlowIn,

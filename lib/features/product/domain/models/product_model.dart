@@ -244,7 +244,28 @@ class Product {
     }
 
     if (json['images_full_url'] != null && json['images_full_url'] is List) {
-      _images = (json['images_full_url'] as List).map((v) => v['path'].toString()).toList();
+      // Only use images_full_url paths when they are absolute URLs.
+      _images = (json['images_full_url'] as List).map<String?>((v) {
+        if (v is Map) {
+          final String? path = v['path']?.toString();
+          if (path != null && (path.startsWith('http://') || path.startsWith('https://'))) {
+            return path;
+          }
+          return null;
+        } else if (v is String && (v.startsWith('http://') || v.startsWith('https://'))) {
+          return v;
+        }
+        return null;
+      }).where((e) => e != null).cast<String>().toList();
+
+      // Fallback: if all paths were relative (filtered out), use plain 'images'
+      if ((_images == null || _images!.isEmpty) && json['images'] != null) {
+        try {
+          _images = json['images'].cast<String>();
+        } catch (_) {
+          _images = jsonDecode(json['images']).cast<String>();
+        }
+      }
     } else if(json['images'] != null){
       try{
         _images = json['images'].cast<String>();
@@ -253,8 +274,28 @@ class Product {
       }
     }
 
-    _thumbnail = json['thumbnail_full_url'] != null ? json['thumbnail_full_url']['path'] : json['thumbnail']?.toString();
-    thumbnailFullUrl = json['thumbnail_full_url'] != null ? ImageFullUrl.fromJson(json['thumbnail_full_url']) : null;
+    if (json['thumbnail_full_url'] != null) {
+      if (json['thumbnail_full_url'] is Map) {
+        final String? fullUrlPath = json['thumbnail_full_url']['path']?.toString();
+        // Prefer the full_url path ONLY when it's already an absolute URL.
+        // If the API sends a relative path (e.g. "product/thumbnail/img.webp"),
+        // fall back to 'thumbnail' which is typically the correct absolute URL.
+        if (fullUrlPath != null && fullUrlPath.isNotEmpty &&
+            (fullUrlPath.startsWith('http://') || fullUrlPath.startsWith('https://'))) {
+          _thumbnail = fullUrlPath;
+        } else {
+          _thumbnail = json['thumbnail']?.toString();
+        }
+        thumbnailFullUrl = ImageFullUrl.fromJson(json['thumbnail_full_url']);
+      } else {
+        final String tStr = json['thumbnail_full_url'].toString();
+        _thumbnail = (tStr.startsWith('http://') || tStr.startsWith('https://'))
+            ? tStr
+            : json['thumbnail']?.toString();
+      }
+    } else {
+      _thumbnail = json['thumbnail']?.toString();
+    }
     if (json['images_full_url'] != null) {
       imagesFullUrl = [];
       json['images_full_url'].forEach((v) {

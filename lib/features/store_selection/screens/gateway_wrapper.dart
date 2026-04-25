@@ -3,7 +3,7 @@ import 'package:flutter_sixvalley_ecommerce/push_notification/models/notificatio
 import 'package:flutter_sixvalley_ecommerce/utill/gateway_service.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/screens/splash_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/features/store_selection/screens/store_selection_screen.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
 import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
 import 'package:flutter_sixvalley_ecommerce/di_container.dart' as di;
@@ -25,13 +25,13 @@ class _GatewayWrapperState extends State<GatewayWrapper> {
   }
 
   void _initializeApp() async {
-    if (!AppConfig.useGateway) {
+    if (!BrandConfig.useGateway) {
       // ── Umart: permanently anchored to Syria ────────────────────────────
       // The country is NEVER chosen by the user. It is hardcoded here and
       // written to SharedPreferences on every cold start so that any code
       // reading the cache (e.g. GatewayService.initFromCache) always sees a
       // valid, brand-matching Syria selection.
-      if (AppConfig.currentBrand == 'umart') {
+      if (BrandConfig.currentBrand == 'umart') {
         const String umartUrl    = 'https://umart.ussus.net';
         const String umartCountry = 'syria'; // matches gateway store country_code
         const String umartLang   = 'ar';
@@ -49,7 +49,7 @@ class _GatewayWrapperState extends State<GatewayWrapper> {
           final prefs = di.sl<SharedPreferences>();
           await prefs.setString(GatewayService.selectedCountryKey, umartCountry);
           await prefs.setString(GatewayService.selectedLangKey,    umartLang);
-          await prefs.setString(GatewayService.selectedBrandKey,   AppConfig.currentBrand);
+          await prefs.setString(GatewayService.selectedBrandKey,   BrandConfig.currentBrand);
         } catch (_) {
           // SharedPreferences not yet available; not critical as URL is set above.
         }

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
 import 'package:flutter_sixvalley_ecommerce/di_container.dart' as di;
 import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/app_config.dart';
+import 'package:flutter_sixvalley_ecommerce/utill/brand_config.dart';
 
 class GatewayService {
   static const String gatewayUrl = 'https://gateway.ussus.net/api/stores';
@@ -39,7 +39,7 @@ class GatewayService {
   /// Attempts to restore the API base URL from the previously cached country
   /// and language selections.
   ///
-  /// **Brand guard**: if the cached brand does not match [AppConfig.currentBrand]
+  /// **Brand guard**: if the cached brand does not match [BrandConfig.currentBrand]
   /// (e.g. leftover cache from a Clickit or different flavor session), the
   /// stale cache is cleared and `false` is returned immediately, which causes
   /// [GatewayWrapper] to force the user to [StoreSelectionScreen].
@@ -51,7 +51,7 @@ class GatewayService {
 
     // ── Brand guard: reject any cache that belongs to a different flavor ───
     final String? cachedBrand = prefs.getString(selectedBrandKey);
-    if (cachedBrand != AppConfig.currentBrand) {
+    if (cachedBrand != BrandConfig.currentBrand) {
       prefs.remove(selectedCountryKey);
       prefs.remove(selectedLangKey);
       prefs.remove(selectedBrandKey);
@@ -76,7 +76,7 @@ class GatewayService {
   /// Core gateway resolver.
   ///
   /// Filters the cached store list by:
-  ///   • [AppConfig.currentBrand]  — derived from `--dart-define=BRAND=...`
+  ///   • [BrandConfig.currentBrand]  — derived from `--dart-define=BRAND=...`
   ///                                 (never from any UI selector)
   ///   • [countryCode]             — user-selected country
   ///   • `is_active == 1`          — only live stores
@@ -112,7 +112,7 @@ class GatewayService {
             decoded is List ? decoded : (decoded['data'] as List? ?? []);
 
         // The brand to match against — always from the compile-time flavor constant.
-        final String brandFilter = AppConfig.currentBrand.toLowerCase();
+        final String brandFilter = BrandConfig.currentBrand.toLowerCase();
 
         for (final store in storeList) {
           final String storeBrand = store['brand'].toString().toLowerCase().trim();
@@ -141,7 +141,7 @@ class GatewayService {
             // ── Persist selections ─────────────────────────────────────────
             prefs.setString(selectedCountryKey, countryCode);
             prefs.setString(selectedLangKey, languageCode);
-            prefs.setString(selectedBrandKey, AppConfig.currentBrand);
+            prefs.setString(selectedBrandKey, BrandConfig.currentBrand);
 
             hasMatch = true;
             break;
@@ -156,7 +156,7 @@ class GatewayService {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${AppConfig.appName} is not yet available in the selected country.\n'
+            '${BrandConfig.appName} is not yet available in the selected country.\n'
             'Please try another region.',
           ),
           backgroundColor: Colors.redAccent,

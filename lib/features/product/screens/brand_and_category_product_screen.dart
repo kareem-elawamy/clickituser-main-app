@@ -110,7 +110,8 @@ class _BrandAndCategoryProductScreenState
 
                 if (!widget.isBrand &&
                     productController.subCategoryList != null &&
-                    productController.subCategoryList!.isNotEmpty)
+                    productController.subCategoryList!.isNotEmpty &&
+                    (productController.hasData == true || productController.brandOrCategoryProductList.isNotEmpty))
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -221,21 +222,90 @@ class _BrandAndCategoryProductScreenState
                                   .brandOrCategoryProductList[index]);
                         },
                       )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: (productController.hasData ?? true)
-                            ? ProductShimmer(
-                                isHomePage: false,
-                                isEnabled:
-                                    Provider.of<ProductController>(context)
-                                        .brandOrCategoryProductList
-                                        .isEmpty)
-                            : const NoInternetOrDataScreenWidget(
-                                isNoInternet: false,
-                                icon: Images.noProduct,
-                                message: 'no_product_found',
+                    : (productController.hasData == false &&
+                           !widget.isBrand &&
+                           productController.subCategoryList != null &&
+                           productController.subCategoryList!.isNotEmpty)
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+                            child: GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: productController.subCategoryList!.length,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1.1,
+                                crossAxisSpacing: Dimensions.paddingSizeSmall,
+                                mainAxisSpacing: Dimensions.paddingSizeSmall,
                               ),
-                      ),
+                              itemBuilder: (context, index) {
+                                var subCategory = productController.subCategoryList![index];
+                                return InkWell(
+                                  onTap: () {
+                                    Provider.of<ProductController>(context, listen: false).clearBrandOrCategoryProductList();
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => BrandAndCategoryProductScreen(
+                                                  isBrand: false,
+                                                  id: subCategory.id.toString(),
+                                                  name: subCategory.name,
+                                                )));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.04),
+                                          blurRadius: 15,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: 60,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(Icons.category_rounded, size: 30, color: Theme.of(context).primaryColor),
+                                        ),
+                                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+                                          child: Text(
+                                            subCategory.name ?? '',
+                                            textAlign: TextAlign.center,
+                                            style: textBold.copyWith(fontSize: 14),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            child: (productController.hasData ?? true)
+                                ? ProductShimmer(
+                                    isHomePage: false,
+                                    isEnabled: productController.brandOrCategoryProductList.isEmpty)
+                                : const NoInternetOrDataScreenWidget(
+                                    isNoInternet: false,
+                                    icon: Images.noProduct,
+                                    message: 'no_product_found',
+                                  ),
+                          ),
 
                 productController.isBrandOrCategoryProductLoading && offset > 1
                     ? Center(
